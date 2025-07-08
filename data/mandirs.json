@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "name": "BAPS Shri Swaminarayan Mandir Ahmedabad",
+    "location": "Shahibaug Road, Ahmedabad 380004 Gujarat, India",
+    "image": "ahmedabad.jpg",
+    "facts": "One of the first BAPS mandirs established in Gujarat",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+91-79-25625151/52, 9998999000",
+      "fax": "+91-79-2562-4405",
+      "email": "info@baps.org"
+    },
+    "lat": 23.0225,
+    "lng": 72.5714,
+    "region": "asia"
+  },
+  {
+    "id": 2,
+    "name": "BAPS Shri Swaminarayan Mandir Delhi",
+    "location": "Gate No. 4, Swaminarayan Akshardham, New Delhi 110092, India",
+    "image": "delhi.jpg",
+    "facts": "World's largest comprehensive Hindu temple",
+    "darshan": "9:30 AM - 6:30 PM (Closed Mondays)",
+    "contact": {
+      "tel": "+91-11-4344 2344",
+      "fax": "+91-11-4344 2323",
+      "email": "info@akshardham.com"
+    },
+    "lat": 28.6129,
+    "lng": 77.2775,
+    "region": "asia"
+  },
+  {
+    "id": 3,
+    "name": "BAPS Shri Swaminarayan Mandir Gandhinagar",
+    "location": "Sector 20, 'J' Road, Gandhinagar 382020 Gujarat, India",
+    "image": "gandhinagar.jpg",
+    "facts": "Showcases 10,000 years of Indian culture",
+    "darshan": "9:30 AM - 7:30 PM",
+    "contact": {
+      "tel": "(079) 23260001/02, 9998999700/800",
+      "fax": "(079) 23260336",
+      "email": "gujarat@akshardham.com"
+    },
+    "lat": 23.2156,
+    "lng": 72.6369,
+    "region": "asia"
+  },
+  {
+    "id": 4,
+    "name": "BAPS Shri Swaminarayan Mandir Mumbai",
+    "location": "Swaminarayan Chowk, Opp. Dadar(CR) Station, Mumbai 400014, India",
+    "image": "mumbai.jpg",
+    "facts": "Located in the heart of Mumbai city",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+91-22-2414 1125, 2414 4000",
+      "fax": "+91-22-2414 1074, 2416 9117",
+      "email": "info.mumbai@in.baps.org"
+    },
+    "lat": 19.0176,
+    "lng": 72.8426,
+    "region": "asia"
+  },
+  {
+    "id": 5,
+    "name": "BAPS Shri Swaminarayan Mandir Atlanta",
+    "location": "460 Rockbridge Road NW, Lilburn, GA 30047, USA",
+    "image": "atlanta.jpg",
+    "facts": "Built using ancient Indian architectural techniques",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "(678) 906-2277",
+      "fax": "(678) 906-2984",
+      "email": "info.atlanta@usa.baps.org"
+    },
+    "lat": 33.8886,
+    "lng": -84.0744,
+    "region": "north-america"
+  },
+  {
+    "id": 6,
+    "name": "BAPS Shri Swaminarayan Mandir Chicago",
+    "location": "1851 S IL Route 59, Bartlett, IL 60103-3008, USA",
+    "image": "chicago.jpg",
+    "facts": "Features intricate stone carvings",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "(630) 213 2277",
+      "fax": "(630) 213 2088",
+      "email": "info.chicago@usa.baps.org"
+    },
+    "lat": 41.8781,
+    "lng": -87.6298,
+    "region": "north-america"
+  },
+  {
+    "id": 7,
+    "name": "BAPS Shri Swaminarayan Mandir Houston",
+    "location": "1150 Brand Lane, Stafford, TX 77477, USA",
+    "image": "houston.jpg",
+    "facts": "Largest mandir in the southern United States",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "281-765-2277",
+      "fax": "281-765 2278",
+      "email": "info.houston@usa.baps.org"
+    },
+    "lat": 29.7604,
+    "lng": -95.3698,
+    "region": "north-america"
+  },
+  {
+    "id": 8,
+    "name": "BAPS Shri Swaminarayan Mandir Los Angeles",
+    "location": "15100 Fairfield Ranch Rd., Chino Hills, CA 91709, USA",
+    "image": "losangeles.jpg",
+    "facts": "Beautiful Pacific Coast location",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "(909) 614 5000",
+      "fax": "(909) 614 5050",
+      "email": "info.la@usa.baps.org"
+    },
+    "lat": 34.0522,
+    "lng": -118.2437,
+    "region": "north-america"
+  },
+  {
+    "id": 9,
+    "name": "BAPS Shri Swaminarayan Mandir Robbinsville",
+    "location": "112 N Main Street, Robbinsville, NJ 08561, USA",
+    "image": "robbinsville.jpg",
+    "facts": "Largest Hindu mandir in the United States",
+    "darshan": "9:00 AM - 7:30 PM",
+    "contact": {
+      "tel": "(609) 918 1212",
+      "email": "info.akshardham@usa.baps.org"
+    },
+    "lat": 40.2206,
+    "lng": -74.7597,
+    "region": "north-america"
+  },
+  {
+    "id": 10,
+    "name": "BAPS Shri Swaminarayan Mandir Toronto",
+    "location": "61 Claireville Drive, Toronto, ON M9W 5Z7, Canada",
+    "image": "toronto.jpg",
+    "facts": "First traditional mandir in Canada",
+    "darshan": "7:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "(416) 798-2277",
+      "fax": "(416) 798-4498",
+      "email": "info@ca.baps.org"
+    },
+    "lat": 43.6532,
+    "lng": -79.3832,
+    "region": "north-america"
+  },
+  {
+    "id": 11,
+    "name": "BAPS Shri Swaminarayan Mandir London",
+    "location": "Pramukh Swami Road, Neasden, London NW10 8HW, UK",
+    "image": "london.jpg",
+    "facts": "First traditional Hindu mandir in Europe",
+    "darshan": "9:00 AM - 6:00 PM",
+    "contact": {
+      "tel": "(+44) 20 8965 2651",
+      "fax": "(+44) 20 8965 6313",
+      "email": "info@uk.baps.org"
+    },
+    "lat": 51.5586,
+    "lng": -0.2508,
+    "region": "europe"
+  },
+  {
+    "id": 12,
+    "name": "BAPS Shri Swaminarayan Mandir Abu Dhabi",
+    "location": "Plot P6 Al Taf Rd (E 16), Abu Mureikhah, Abu Dhabi, UAE",
+    "image": "abudhabi.jpg",
+    "facts": "First stone mandir in the Middle East",
+    "darshan": "6:00 AM - 12:00 PM, 4:00 PM - 9:00 PM",
+    "contact": {
+      "tel": "(971) 25561982",
+      "email": "info@uae.baps.org"
+    },
+    "lat": 24.4667,
+    "lng": 54.3667,
+    "region": "other"
+  }
+]
