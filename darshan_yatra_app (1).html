@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darshan Yatra - Your Personalized BAPS Mandir Journey</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a56 0%, #ffad56 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: #fff;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-tab.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .map-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            height: 600px;
+            position: relative;
+        }
+
+        #world-map {
+            height: 100%;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .map-overlay h3 {
+            margin-bottom: 10px;
+        }
+
+        .map-overlay label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .map-overlay select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .mandir-card {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mandir-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .mandir-card.visited {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-color: #4CAF50;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+            to { box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); }
+        }
+
+        .mandir-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .mandir-card p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .murti-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 20px auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        .score-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .streak-display {
+            font-size: 1.2em;
+            color: #FF9800;
+            margin-bottom: 10px;
+        }
+
+        .chatbot-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chat-input button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .fun-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .fact-card {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.3);
+        }
+
+        .start-game-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .start-game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .start-game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: confetti-fall 5s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .badge {
+            width: 80px;
+            height: 80px;
+            margin: 10px auto;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .progress-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .nav-tab {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            
+            .murti-image {
+                width: 250px;
+                height: 150px;
+            }
+
+            .map-container {
+                height: 400px;
+            }
+
+            .map-overlay {
+                top: 20px;
+                right: 20px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Darshan Yatra</h1>
+            <p>Your Personalized BAPS Mandir Journey</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="stats">
+                <span>Visited: <span id="visited-count">0</span>/<span id="total-mandirs">12</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="stats">
+                <span>Quiz Score: <span id="quiz-score">0</span></span>
+                <span>Streak: <span id="streak-count">0</span>🔥</span>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('map')">🗺️ Interactive Map</button>
+            <button class="nav-tab" onclick="showSection('game')">🎮 Murti Quiz</button>
+            <button class="nav-tab" onclick="showSection('chatbot')">💬 Mandir Guide</button>
+        </div>
+
+        <div id="map-section" class="content-section active">
+            <div class="map-container">
+                <div class="map-overlay">
+                    <h3>🌍 Filter Mandirs</h3>
+                    <label for="region-filter">Region:</label>
+                    <select id="region-filter" onchange="filterMandirs()">
+                        <option value="all">All Regions</option>
+                        <option value="north-america">North America</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div id="world-map"></div>
+            </div>
+        </div>
+
+        <div id="game-section" class="content-section">
+            <div class="game-container">
+                <h2>🎯 Murti Darshan Quiz</h2>
+                <div class="score-display">Score: <span id="game-score">0</span></div>
+                <div class="streak-display">Current Streak: <span id="current-streak">0</span> 🔥</div>
+                <button class="start-game-btn" id="start-game" onclick="startGame()">Start Quiz</button>
+                <div id="game-content" style="display: none;">
+                    <img id="murti-image" class="murti-image" alt="Murti Darshan">
+                    <p id="question-text">Which mandir is this beautiful murti from?</p>
+                    <div class="game-options" id="game-options"></div>
+                    <button class="start-game-btn" id="next-question" onclick="nextQuestion()" style="display: none;">Next Question</button>
+                </div>
+                <div id="game-message">
+                    <p>Visit at least 2 mandirs to unlock the quiz!</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatbot-section" class="content-section">
+            <div class="chatbot-container">
+                <h2>🤖 Mandir Guide Assistant</h2>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot">
+                        <p>Namaste! I'm your Mandir Guide. Ask me about darshan timings, mandir locations, or interesting facts about any BAPS mandir!</p>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Ask about mandir timings, locations, or facts..." onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+                
+                <div class="fun-facts">
+                    <div class="fact-card" onclick="showFact('akshardham')">
+                        <h3>🏛️ Akshardham Delhi</h3>
+                        <p>Click for amazing facts!</p>
+                    </div>
+                    <div class="fact-card" onclick="showFact('atlanta')">
+                        <h3>🌟 Atlanta Mandir</h3>
+                        <p>Discover its history!</p>
+                    </div>
+                    <div class="fact-card" onclick="showFact('london')">
+                        <h3>👑 London Mandir</h3>
+                        <p>Learn about Neasden!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="visit-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="badge">🏆</div>
+            <h2 id="modal-title">Mandir Visited!</h2>
+            <p id="modal-text"></p>
+            <p id="modal-fact"></p>
+            <button class="start-game-btn" onclick="closeModal()">Continue</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Global variables
+        let mandirs = [];
+        let visitedMandirs = JSON.parse(localStorage.getItem('visitedMandirs')) || [];
+        let currentQuestion = 0;
+        let gameScore = parseInt(localStorage.getItem('gameScore')) || 0;
+        let currentStreak = parseInt(localStorage.getItem('currentStreak')) || 0;
+        let highestStreak = parseInt(localStorage.getItem('highestStreak')) || 0;
+        let quizQuestions = [];
+        let map;
+        let markers = [];
+        let currentRegionFilter = 'all';
+
+        // Load mandir data from JSON
+        async function loadMandirData() {
+            try {
+                const response = await fetch('data/mandirs.json');
+                mandirs = await response.json();
+                document.getElementById('total-mandirs').textContent = mandirs.length;
+                initMap();
+                updateProgress();
+                updateGameButton();
+                
+                // Load any previously visited mandirs
+                if (visitedMandirs.length > 0) {
+                    visitedMandirs.forEach(id => {
+                        const mandir = mandirs.find(m => m.id === id);
+                        if (mandir) {
+                            updateMarker(mandir, true);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading mandir data:', error);
+                alert('Failed to load mandir data. Please try again later.');
+            }
+        }
+
+        // Initialize the map
+        function initMap() {
+            map = L.map('world-map').setView([20, 0], 2);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Add markers for each mandir
+            mandirs.forEach(mandir => {
+                const isVisited = visitedMandirs.includes(mandir.id);
+                const marker = L.marker([mandir.lat, mandir.lng], {
+                    icon: L.divIcon({
+                        className: `mandir-marker ${isVisited ? 'visited' : ''}`,
+                        html: isVisited ? '🏛️' : '📍',
+                        iconSize: [30, 30]
+                    })
+                }).addTo(map);
+                
+                marker.on('click', () => {
+                    visitMandir(mandir.id);
+                });
+                
+                marker.bindPopup(`
+                    <b>${mandir.name}</b><br>
+                    ${mandir.location}<br>
+                    <small>${isVisited ? '✅ Visited' : 'Click to mark as visited'}</small>
+                `);
+                
+                markers.push({
+                    id: mandir.id,
+                    marker: marker
+                });
+            });
+        }
+
+        // Filter mandirs on map
+        function filterMandirs() {
+            const region = document.getElementById('region-filter').value;
+            currentRegionFilter = region;
+            
+            markers.forEach(markerObj => {
+                const mandir = mandirs.find(m => m.id === markerObj.id);
+                if (region === 'all' || mandir.region === region) {
+                    markerObj.marker.addTo(map);
+                } else {
+                    map.removeLayer(markerObj.marker);
+                }
+            });
+        }
+
+        // Update marker appearance
+        function updateMarker(mandir, isVisited) {
+            const markerObj = markers.find(m => m.id === mandir.id);
+            if (markerObj) {
+                markerObj.marker.setIcon(L.divIcon({
+                    className: `mandir-marker ${isVisited ? 'visited' : ''}`,
+                    html: isVisited ? '🏛️' : '📍',
+                    iconSize: [30, 30]
+                }));
+                
+                markerObj.marker.setPopupContent(`
+                    <b>${mandir.name}</b><br>
+                    ${mandir.location}<br>
+                    <small>${isVisited ? '✅ Visited' : 'Click to mark as visited'}</small>
+                `);
+            }
+        }
+
+        // Visit a mandir
+        function visitMandir(mandirId) {
+            if (!visitedMandirs.includes(mandirId)) {
+                visitedMandirs.push(mandirId);
+                localStorage.setItem('visitedMandirs', JSON.stringify(visitedMandirs));
+                
+                const mandir = mandirs.find(m => m.id === mandirId);
+                updateMarker(mandir, true);
+                updateProgress();
+                updateGameButton();
+                
+                // Show celebration
+                showVisitAnimation(mandir);
+                createConfetti();
+            }
+        }
+
+        // Show visit animation
+        function showVisitAnimation(mandir) {
+            document.getElementById('modal-title').textContent = `You've visited ${mandir.name}!`;
+            document.getElementById('modal-text').textContent = `Location: ${mandir.location}`;
+            document.getElementById('modal-fact').textContent = `Did you know? ${mandir.facts}`;
+            
+            const modal = document.getElementById('visit-modal');
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('visit-modal').style.display = 'none';
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (visitedMandirs.length / mandirs.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('visited-count').textContent = visitedMandirs.length;
+        }
+
+        // Update game button state
+        function updateGameButton() {
+            const startBtn = document.getElementById('start-game');
+            const messageDiv = document.getElementById('game-message');
+            
+            if (visitedMandirs.length >= 2) {
+                startBtn.disabled = false;
+                messageDiv.innerHTML = '<p>Ready to test your knowledge? Click "Start Quiz" to begin!</p>';
+            } else {
+                startBtn.disabled = true;
+                messageDiv.innerHTML = '<p>Visit at least 2 mandirs to unlock the quiz!</p>';
+            }
+        }
+
+        // Get local image path for mandir
+        function getMandirImagePath(mandirId) {
+            const mandir = mandirs.find(m => m.id === mandirId);
+            if (mandir) {
+                return `mandirpics/${mandir.image}`;
+            }
+            return '';
+        }
+
+        // Start the quiz game
+        function startGame() {
+            if (visitedMandirs.length < 2) return;
+            
+            gameScore = 0;
+            currentQuestion = 0;
+            generateQuizQuestions();
+            
+            document.getElementById('start-game').style.display = 'none';
+            document.getElementById('game-content').style.display = 'block';
+            document.getElementById('game-message').style.display = 'none';
+            
+            showQuestion();
+        }
+
+        // Generate quiz questions
+        function generateQuizQuestions() {
+            quizQuestions = [];
+            const shuffledVisited = [...visitedMandirs].sort(() => Math.random() - 0.5);
+            
+            // Create 5 questions or as many as possible if less than 5 visited
+            for (let i = 0; i < Math.min(5, shuffledVisited.length); i++) {
+                const correctMandir = mandirs.find(m => m.id === shuffledVisited[i]);
+                const wrongOptions = mandirs.filter(m => 
+                    visitedMandirs.includes(m.id) && m.id !== correctMandir.id
+                ).sort(() => Math.random() - 0.5).slice(0, 3);
+                
+                const options = [correctMandir, ...wrongOptions].sort(() => Math.random() - 0.5);
+                
+                quizQuestions.push({
+                    correct: correctMandir,
+                    options: options,
+                    answered: false
+                });
+            }
+        }
+
+        // Show current question
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                endGame();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuestion];
+            document.getElementById('murti-image').src = getMandirImagePath(question.correct.id);
+            document.getElementById('game-score').textContent = gameScore;
+            document.getElementById('current-streak').textContent = currentStreak;
+            
+            const optionsDiv = document.getElementById('game-options');
+            optionsDiv.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.name;
+                btn.onclick = () => selectAnswer(option.id, btn);
+                optionsDiv.appendChild(btn);
+            });
+            
+            document.getElementById('next-question').style.display = 'none';
+        }
+
+        // Select an answer
+        function selectAnswer(selectedId, btnElement) {
+            const question = quizQuestions[currentQuestion];
+            if (question.answered) return;
+            
+            question.answered = true;
+            const isCorrect = selectedId === question.correct.id;
+            
+            if (isCorrect) {
+                gameScore++;
+                currentStreak++;
+                if (currentStreak > highestStreak) {
+                    highestStreak = currentStreak;
+                    localStorage.setItem('highestStreak', highestStreak);
+                    document.getElementById('streak-count').textContent = highestStreak;
+                }
+                btnElement.classList.add('correct');
+            } else {
+                currentStreak = 0;
+                btnElement.classList.add('incorrect');
+                // Show correct answer
+                const correctBtn = [...document.querySelectorAll('.option-btn')]
+                    .find(btn => btn.textContent === question.correct.name);
+                correctBtn.classList.add('correct');
+            }
+            
+            // Disable all buttons
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            document.getElementById('next-question').style.display = 'block';
+            document.getElementById('game-score').textContent = gameScore;
+            document.getElementById('quiz-score').textContent = gameScore;
+            document.getElementById('current-streak').textContent = currentStreak;
+            
+            localStorage.setItem('gameScore', gameScore);
+            localStorage.setItem('currentStreak', currentStreak);
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        // End game
+        function endGame() {
+            let message;
+            if (gameScore === quizQuestions.length) {
+                message = 'Perfect! You know your mandirs well!';
+                createConfetti();
+            } else if (gameScore >= quizQuestions.length/2) {
+                message = 'Great job! Keep visiting more mandirs!';
+            } else {
+                message = 'Keep exploring and learning about these beautiful mandirs!';
+            }
+            
+            document.getElementById('game-content').innerHTML = `
+                <h3>🎉 Quiz Complete!</h3>
+                <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
+                <p>${message}</p>
+                <p>Your highest streak: ${highestStreak} 🔥</p>
+                <button class="start-game-btn" onclick="startGame()">Play Again</button>
+            `;
+        }
+
+        // Show section
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(section + '-section').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Refresh map when showing map section
+            if (section === 'map') {
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
+            }
+        }
+
+        // Chatbot functionality
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check if asking about a specific mandir
+            const mandirMatch = mandirs.find(m => 
+                lowerMessage.includes(m.name.toLowerCase().split(' ')[0]) || 
+                lowerMessage.includes(m.location.toLowerCase().split(',')[0])
+            );
+            
+            if (mandirMatch) {
+                let response = `<b>${mandirMatch.name}</b><br>`;
+                response += `<i>${mandirMatch.location}</i><br><br>`;
+                response += `<b>Darshan Timings:</b> ${mandirMatch.darshan}<br>`;
+                response += `<b>Contact:</b> ${mandirMatch.contact.tel || 'N/A'}`;
+                if (mandirMatch.contact.email) {
+                    response += `<br><b>Email:</b> ${mandirMatch.contact.email}`;
+                }
+                response += `<br><br><b>Did you know?</b> ${mandirMatch.facts}`;
+                
+                if (!visitedMandirs.includes(mandirMatch.id)) {
+                    response += `<br><br>You haven't visited this mandir yet. Would you like to learn more about planning a visit?`;
+                }
+                
+                return response;
+            }
+            
+            if (lowerMessage.includes('darshan') || lowerMessage.includes('timing')) {
+                return "Most BAPS mandirs are open for darshan from 7:00 AM to 12:00 PM and 4:00 PM to 8:00 PM. For specific timings, please check the individual mandir's website or call them directly.";
+            } else if (lowerMessage.includes('visit') || lowerMessage.includes('plan')) {
+                return "When planning a mandir visit, I recommend checking the mandir's website for current darshan timings, dress code requirements, and any special events. Most mandirs welcome visitors for darshan, cultural programs, and festivals.";
+            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('namaste')) {
+                return "Namaste! How can I help you with your mandir journey today?";
+            } else if (lowerMessage.includes('thank')) {
+                return "You're welcome! Is there anything else you'd like to know about BAPS mandirs?";
+            } else {
+                return "I can help you with information about mandir darshan timings, locations, architecture, and visiting tips. Try asking about specific mandirs like 'Akshardham', 'Atlanta mandir', or 'London mandir'!";
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function showFact(mandir) {
+            let fact = '';
+            switch(mandir) {
+                case 'akshardham':
+                    fact = "Akshardham Delhi took 5 years to build and was completed in 2005. It features 234 ornately carved pillars, 9 ornate domes, and over 20,000 sculptures of devotees, acharyas, and divine figures!";
+                    break;
+                case 'atlanta':
+                    fact = "The Atlanta mandir was built using 34,000 pieces of hand-carved Italian marble and Turkish limestone. It took over 1.3 million hours of skilled craftsmanship and was completed in 2007!";
+                    break;
+                case 'london':
+                    fact = "The London mandir used 2,828 tons of Bulgarian limestone and 2,000 tons of Italian marble. Every single piece was hand-carved in India by over 1,500 skilled artisans!";
+                    break;
+                default:
+                    fact = "BAPS mandirs are architectural marvels that blend ancient Indian craftsmanship with modern engineering techniques!";
+            }
+            addMessage(`🏛️ Fun Fact: ${fact}`, 'bot');
+        }
+
+        // Initialize the app when page loads
+        window.onload = loadMandirData;
+    </script>
+</body>
+</html>
