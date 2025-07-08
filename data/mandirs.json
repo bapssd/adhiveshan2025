@@ -189,4 +189,229 @@
     "lng": 54.3667,
     "region": "other"
   }
+  {
+    "id": 13,
+    "name": "BAPS Shri Swaminarayan Mandir Nairobi",
+    "location": "Forest Road (Limuru Road), Nairobi, Kenya",
+    "image": "nairobi.jpg",
+    "facts": "First traditional stone & marble Hindu temple built in Africa by BAPS; completed in 1999 using 350 tonnes of yellow sandstone from Rajasthan and intricate East African wood carvings",
+    "darshan": "8:00 AM - 12:00 PM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+254-20-8015999 / 737590999",
+      "fax": "+254-20-2320202",
+      "email": "info@africa.baps.org"
+    },
+    "lat": -1.268219,
+    "lng": 36.822672,
+    "region": "africa"
+  }
+  {
+    "id": 14,
+    "name": "BAPS Shri Swaminarayan Mandir Dar es Salaam",
+    "location": "Plot No. 14, Mikocheni Light Industrial Area, Dar es Salaam, Tanzania",
+    "image": "dar-es-salaam.jpg",
+    "facts": "The first traditional stone mandir built by BAPS on the African continent.",
+    "darshan": "7:30 AM - 11:00 AM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+255-22-2774306",
+      "fax": "+255-22-2774307",
+      "email": "info.dar@baps.org"
+    },
+    "lat": -6.7502,
+    "lng": 39.2424,
+    "region": "africa"
+  }
+  {
+    "id": 15,
+    "name": "BAPS Shri Swaminarayan Mandir Kampala",
+    "location": "Plot 26, Nakasero Road, Kampala, Uganda",
+    "image": "kampala.jpg",
+    "facts": "Serves as a spiritual and cultural center for the Indian diaspora in Uganda.",
+    "darshan": "7:30 AM - 11:00 AM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+256-414-341-521",
+      "fax": "+256-414-341-522",
+      "email": "info.kampala@baps.org"
+    },
+    "lat": 0.3236,
+    "lng": 32.5825,
+    "region": "africa"
+  }
+  {
+    "id": 16,
+    "name": "BAPS Shri Swaminarayan Mandir Johannesburg",
+    "location": "28 Park Drive, Mayfair, Johannesburg, South Africa",
+    "image": "johannesburg.jpg",
+    "facts": "A vibrant hub for satsang and cultural activities in South Africa.",
+    "darshan": "7:30 AM - 11:00 AM, 4:00 PM - 8:00 PM",
+    "contact": {
+      "tel": "+27-11-837-3260",
+      "fax": "+27-11-837-3261",
+      "email": "info.johannesburg@baps.org"
+    },
+    "lat": -26.1997,
+    "lng": 28.0112,
+    "region": "africa"
+  }
+  {
+    "id": 17,
+    "name": "BAPS Shri Swaminarayan Mandir Sarangpur",
+    "location": "Ta. Barvala, Dist. Botad, Sarangpur 382451, Gujarat, India",
+    "image": "sarangpur.jpg",
+    "facts": "Second tallest Swaminarayan temple in Gujarat, renowned for its white marble architecture and spiritual training center for sadhus.",
+    "darshan": "6:00 AM - 12:00 PM, 4:00 PM - 8:30 PM",
+    "contact": {
+      "tel": "+91-9998995500",
+      "fax": "+91-2711-241192",
+      "email": "info.sarangpur@baps.org"
+    },
+    "lat": 22.0941,
+    "lng": 71.4610,
+    "region": "asia"
+  }
+  {
+    "id": 18,
+    "name": "BAPS Shri Swaminarayan Mandir Gondal",
+    "location": "Yogiji Maharaj Road, Gondal 360311, Gujarat, India",
+    "image": "gondal.jpg",
+    "facts": "Inaugurated in 1934 by Shastriji Maharaj, this mandir is renowned for its intricate carvings and spiritual significance.",
+    "darshan": "6:00 AM – 12:00 PM, 4:00 PM – 8:15 PM",
+    "contact": {
+      "tel": "+91-2825-220788",
+      "fax": "+91-2825-229037",
+      "email": "info@gondal.baps.org"
+    },
+    "lat": 21.9545,
+    "lng": 70.8047,
+    "region": "asia"
+  }
+  {
+    "id": 19,
+    "name": "BAPS Shri Swaminarayan Mandir Gadhada",
+    "location": "On Tekra, Gadhada 364750, Gujarat, India",
+    "image": "gadhada.jpg",
+    "facts": "Inaugurated in 1951 by Yogiji Maharaj, this mandir is a significant spiritual center and pilgrimage site in the Swaminarayan tradition.",
+    "darshan": "7:30 AM – 10:15 AM, 11:15 AM – 12:00 PM, 4:00 PM – 6:00 PM, 7:00 PM – 8:15 PM",
+    "contact": {
+      "tel": "+91-2847-252001",
+      "fax": "+91-2847-252051",
+      "email": "info.gadhada@baps.org"
+    },
+    "lat": 21.9514,
+    "lng": 71.5761,
+    "region": "asia"
+  }
+  {
+    "id": 20,
+    "name": "BAPS Shri Swaminarayan Mandir Bochasan",
+    "location": "Bochasan 388140, Gujarat, India",
+    "image": "bochasan.jpg",
+    "facts": "Established in 1907 by Shastriji Maharaj, this mandir is the birthplace of the Bochasanwasi Shri Akshar Purushottam Swaminarayan Sanstha (BAPS).",
+    "darshan": "6:00 AM – 8:15 PM",
+    "contact": {
+      "tel": "+91-2696-286626",
+      "fax": "+91-2696-286684",
+      "email": "info@baps.org"
+    },
+    "lat": 22.5917,
+    "lng": 73.1000,
+    "region": "asia"
+  }
+  {
+    "id": 21,
+    "name": "BAPS Shri Swaminarayan Mandir Atladra",
+    "location": "Shastri Yagnapurushdas Marg, Atladara, Vadodara 390012, Gujarat, India",
+    "image": "atladra.jpg",
+    "facts": "Inaugurated in 1945 by Shastriji Maharaj, this mandir is known for its intricate carvings and spiritual significance.",
+    "darshan": "6:00 AM – 8:15 PM",
+    "contact": {
+      "tel": "+91-265-2680121/22, 9998991000",
+      "fax": "+91-265-2680080",
+      "email": "info@baps.org"
+    },
+    "lat": 22.2850,
+    "lng": 73.1840,
+    "region": "asia"
+  }
+  {
+    "id": 22,
+    "name": "BAPS Shri Swaminarayan Mandir Rajkot",
+    "location": "Rajkot, Gujarat, India",
+    "image": "rajkot.jpg",
+    "facts": "A prominent spiritual center in Rajkot, known for its traditional architecture and vibrant community activities.",
+    "darshan": "6:00 AM – 8:00 PM",
+    "contact": {
+      "tel": "+91-281-2248700",
+      "fax": "+91-281-2248799",
+      "email": "info.rajkot@baps.org"
+    },
+    "lat": 22.3039,
+    "lng": 70.8022,
+    "region": "asia"
+  }
+  {
+    "id": 23,
+    "name": "BAPS Shri Swaminarayan Mandir Bhuj",
+    "location": "Bhuj, Kutch, Gujarat, India",
+    "image": "bhuj.jpg",
+    "facts": "Known for its intricate carvings and resilience after the 2001 earthquake, this mandir is a symbol of devotion and community strength.",
+    "darshan": "6:00 AM – 8:00 PM",
+    "contact": {
+      "tel": "+91-2832-235555",
+      "fax": "+91-2832-235556",
+      "email": "info.bhuj@baps.org"
+    },
+    "lat": 23.2419,
+    "lng": 69.6663,
+    "region": "asia"
+  }
+  {
+    "id": 24,
+    "name": "BAPS Shri Swaminarayan Mandir Junagadh",
+    "location": "Junagadh, Gujarat, India",
+    "image": "junagadh.jpg",
+    "facts": "A culturally rich mandir known for its spiritual activities and traditional carvings.",
+    "darshan": "6:00 AM – 8:00 PM",
+    "contact": {
+      "tel": "+91-2825-123456",
+      "fax": "+91-2825-123457",
+      "email": "info.junagadh@baps.org"
+    },
+    "lat": 21.5222,
+    "lng": 70.4579,
+    "region": "asia"
+  }
+  {
+    "id": 25,
+    "name": "BAPS Shri Swaminarayan Mandir Bhavnagar",
+    "location": "Aksharvadi, Aksharvadi Marg, Bhavnagar 364001, Gujarat, India",
+    "image": "bhavnagar.jpg",
+    "facts": "A prominent shikharbaddh mandir known for its traditional architecture and spiritual significance.",
+    "darshan": "6:00 AM – 8:15 PM",
+    "contact": {
+      "tel": "+91-278-2561600",
+      "fax": "+91-278-2563799",
+      "email": "info@baps.org"
+    },
+    "lat": 21.7683,
+    "lng": 72.1500,
+    "region": "asia"
+  }
+  {
+    "id": 26,
+    "name": "BAPS Shri Swaminarayan Mandir Surat",
+    "location": "Pramukh Swami Maharaj Marg, Swaminarayan Chowk, Nr. Sardar Bridge Adajan, Surat 395009, Gujarat, India",
+    "image": "surat.jpg",
+    "facts": "Inaugurated by Pramukh Swami Maharaj on December 16, 1996, this mandir is located near the banks of the Tapi River in Surat, Gujarat.",
+    "darshan": "6:00 AM – 8:15 PM",
+    "contact": {
+      "tel": "+91-261-2796344, 9998992000",
+      "fax": "+91-261-2786170",
+      "email": "info@baps.org"
+    },
+    "lat": 21.1702,
+    "lng": 72.8311,
+    "region": "asia"
+  }
+
 ]
