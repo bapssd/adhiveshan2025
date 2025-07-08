@@ -188,7 +188,7 @@
     "lat": 24.4667,
     "lng": 54.3667,
     "region": "other"
-  }
+  },
   {
     "id": 13,
     "name": "BAPS Shri Swaminarayan Mandir Nairobi",
@@ -204,7 +204,7 @@
     "lat": -1.268219,
     "lng": 36.822672,
     "region": "africa"
-  }
+  },
   {
     "id": 14,
     "name": "BAPS Shri Swaminarayan Mandir Dar es Salaam",
@@ -220,7 +220,7 @@
     "lat": -6.7502,
     "lng": 39.2424,
     "region": "africa"
-  }
+  },
   {
     "id": 15,
     "name": "BAPS Shri Swaminarayan Mandir Kampala",
@@ -236,7 +236,7 @@
     "lat": 0.3236,
     "lng": 32.5825,
     "region": "africa"
-  }
+  },
   {
     "id": 16,
     "name": "BAPS Shri Swaminarayan Mandir Johannesburg",
@@ -252,7 +252,7 @@
     "lat": -26.1997,
     "lng": 28.0112,
     "region": "africa"
-  }
+  },
   {
     "id": 17,
     "name": "BAPS Shri Swaminarayan Mandir Sarangpur",
@@ -268,7 +268,7 @@
     "lat": 22.0941,
     "lng": 71.4610,
     "region": "asia"
-  }
+  },
   {
     "id": 18,
     "name": "BAPS Shri Swaminarayan Mandir Gondal",
@@ -284,7 +284,7 @@
     "lat": 21.9545,
     "lng": 70.8047,
     "region": "asia"
-  }
+  },
   {
     "id": 19,
     "name": "BAPS Shri Swaminarayan Mandir Gadhada",
@@ -300,7 +300,7 @@
     "lat": 21.9514,
     "lng": 71.5761,
     "region": "asia"
-  }
+  },
   {
     "id": 20,
     "name": "BAPS Shri Swaminarayan Mandir Bochasan",
@@ -316,7 +316,7 @@
     "lat": 22.5917,
     "lng": 73.1000,
     "region": "asia"
-  }
+  },
   {
     "id": 21,
     "name": "BAPS Shri Swaminarayan Mandir Atladra",
@@ -332,7 +332,7 @@
     "lat": 22.2850,
     "lng": 73.1840,
     "region": "asia"
-  }
+  },
   {
     "id": 22,
     "name": "BAPS Shri Swaminarayan Mandir Rajkot",
@@ -348,7 +348,7 @@
     "lat": 22.3039,
     "lng": 70.8022,
     "region": "asia"
-  }
+  },
   {
     "id": 23,
     "name": "BAPS Shri Swaminarayan Mandir Bhuj",
@@ -364,7 +364,7 @@
     "lat": 23.2419,
     "lng": 69.6663,
     "region": "asia"
-  }
+  },
   {
     "id": 24,
     "name": "BAPS Shri Swaminarayan Mandir Junagadh",
@@ -380,7 +380,7 @@
     "lat": 21.5222,
     "lng": 70.4579,
     "region": "asia"
-  }
+  },
   {
     "id": 25,
     "name": "BAPS Shri Swaminarayan Mandir Bhavnagar",
@@ -396,7 +396,7 @@
     "lat": 21.7683,
     "lng": 72.1500,
     "region": "asia"
-  }
+  },
   {
     "id": 26,
     "name": "BAPS Shri Swaminarayan Mandir Surat",
