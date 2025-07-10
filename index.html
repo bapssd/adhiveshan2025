@@ -633,7 +633,7 @@
                 const lowerMsg = message.toLowerCase().trim();
                 
                 // Handle general queries
-                if (/(hello|hi|namaste)/i.test(lowerMsg)) return this.generalResponses.greeting;
+                if (/(hello|hi|namaste|yo)/i.test(lowerMsg)) return this.generalResponses.greeting;
                 if (/(bye|goodbye|farewell)/i.test(lowerMsg)) return this.generalResponses.farewell;
                 if (/(help|what can you do)/i.test(lowerMsg)) return this.generalResponses.help;
                 
@@ -647,7 +647,26 @@
                 const regionMatch = this.checkForRegionQuery(lowerMsg);
                 if (regionMatch) return this.handleRegionQuery(regionMatch);
                 
+                // Specific handling for "gimme a fact about X" queries
+                const factMatch = lowerMsg.match(/(?:fact|tell me) about (.*)/i);
+                if (factMatch) {
+                    const mandirName = factMatch[1].trim();
+                    const mandir = this.findMandirByNameOrLocation(mandirName);
+                    if (mandir) {
+                        return this.handleMandirQuery(mandir, 'fact', lowerMsg);
+                    }
+                }
+                
                 return this.generalResponses.unknown;
+            }
+
+            // Helper method to find mandir by name or location
+            findMandirByNameOrLocation(searchTerm) {
+                const lowerSearch = searchTerm.toLowerCase();
+                return this.mandirs.find(m => 
+                    m.name.toLowerCase().includes(lowerSearch) || 
+                    m.location.toLowerCase().includes(lowerSearch)
+                );
             }
 
             // Find which mandir is being asked about
@@ -951,12 +970,20 @@
             return '';
         }
 
-        // Start the quiz game
         function startGame() {
             if (visitedMandirs.length < 2) return;
             
+            // Reset game state
             gameScore = 0;
             currentQuestion = 0;
+            currentStreak = 0;
+            
+            // Update UI
+            document.getElementById('game-score').textContent = gameScore;
+            document.getElementById('current-streak').textContent = currentStreak;
+            document.getElementById('quiz-score').textContent = gameScore;
+            document.getElementById('streak-count').textContent = highestStreak;
+            
             generateQuizQuestions();
             
             document.getElementById('start-game').style.display = 'none';
@@ -1077,8 +1104,15 @@
                 <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
                 <p>${message}</p>
                 <p>Your highest streak: ${highestStreak} 🔥</p>
-                <button class="start-game-btn" onclick="startGame()">Play Again</button>
+                <button class="start-game-btn" onclick="resetAndStartGame()">Play Again</button>
             `;
+        }
+
+        // New function to reset and start game
+        function resetAndStartGame() {
+            document.getElementById('game-content').style.display = 'none';
+            document.getElementById('start-game').style.display = 'block';
+            startGame();
         }
 
         // Show section
