@@ -791,28 +791,29 @@
         function startGame() {
             if (visitedMandirs.length < 2) return;
         
-            // Reset state
-            gameScore = 0;
-            currentQuestion = 0;
-            currentStreak = 0;
-            generateQuizQuestions();
-        
-            // Remove previous result
+            // Remove result if it exists
             const oldResult = document.getElementById('quiz-result');
             if (oldResult) oldResult.remove();
         
-            // Show UI again
+            // Reset state
+            gameScore = 0;
+            currentStreak = 0;
+            currentQuestion = 0;
+            generateQuizQuestions();
+        
+            // Show quiz UI again
             document.getElementById('murti-image').style.display = 'block';
             document.getElementById('question-text').style.display = 'block';
             document.getElementById('game-options').style.display = 'block';
             document.getElementById('next-question').style.display = 'none';
-            document.getElementById('game-message').style.display = 'none';
-            document.getElementById('start-game').style.display = 'none';
             document.getElementById('game-score').textContent = gameScore;
             document.getElementById('current-streak').textContent = currentStreak;
+            document.getElementById('game-message').style.display = 'none';
+            document.getElementById('start-game').style.display = 'none';
         
             showQuestion();
         }
+
 
 
         // Generate quiz questions
@@ -921,24 +922,26 @@
                 message = 'Keep exploring and learning about these beautiful mandirs!';
             }
         
-            // Hide quiz UI elements
+            // Hide quiz UI
             document.getElementById('murti-image').style.display = 'none';
             document.getElementById('question-text').style.display = 'none';
             document.getElementById('game-options').style.display = 'none';
             document.getElementById('next-question').style.display = 'none';
         
-            // Create results display
-            const resultDiv = document.createElement('div');
-            resultDiv.id = 'quiz-result';
-            resultDiv.innerHTML = `
-                <h3>🎉 Quiz Complete!</h3>
-                <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
-                <p>${message}</p>
-                <p>Your highest streak: ${highestStreak} 🔥</p>
-                <button class="start-game-btn" onclick="startGame()">Play Again</button>
+            // Show result div
+            const resultHTML = `
+                <div id="quiz-result">
+                    <h3>🎉 Quiz Complete!</h3>
+                    <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
+                    <p>${message}</p>
+                    <p>Your highest streak: ${highestStreak} 🔥</p>
+                    <button class="start-game-btn" onclick="startGame()">Play Again</button>
+                </div>
             `;
-            document.getElementById('game-content').appendChild(resultDiv);
+        
+            document.getElementById('game-content').insertAdjacentHTML('beforeend', resultHTML);
         }
+
 
 
         // Show section
