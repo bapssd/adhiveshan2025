@@ -412,6 +412,54 @@
     "lat": 21.1702,
     "lng": 72.8311,
     "region": "asia"
+  },
+  {
+    "id": 27,
+    "name": "BAPS Shri Swaminarayan Mandir Melbourne",
+    "location": "60 Heaths Court, Mill Park, Melbourne, VIC 3082, Australia",
+    "image": "melbourne.jpg",
+    "facts": "A key center for Hindu worship and cultural activities in Victoria, Australia.",
+    "darshan": "7:00 AM – 12:00 PM, 4:00 PM – 8:00 PM",
+    "contact": {
+      "tel": "(61-3) 94376767",
+      "fax": "(61-3) 94376768",
+      "email": "info.melbourne@au.baps.org"
+    },
+    "lat": -37.6811,
+    "lng": 145.0635,
+    "region": "other"
+  },
+  {
+    "id": 28,
+    "name": "BAPS Shri Swaminarayan Mandir Sydney",
+    "location": "230 Aldington Rd, Kemps Creek NSW 2178, Australia",
+    "image": "sydney.jpg",
+    "facts": "A vibrant center for satsang and Hindu cultural events in New South Wales.",
+    "darshan": "7:00 AM – 12:00 PM, 4:00 PM – 8:00 PM",
+    "contact": {
+      "tel": "(+61) 2 6535 2277",
+      "email": "info.sydney@au.baps.org"
+    },
+    "lat": -33.8734,
+    "lng": 150.7812,
+    "region": "other"
+  },
+  {
+    "id": 29,
+    "name": "BAPS Shri Swaminarayan Mandir Bharuch",
+    "location": "National Hiway - 8, Zadeshwar, Bharuch 392011, Gujarat, India",
+    "image": "bharuch.jpg",
+    "facts": "An important spiritual center located strategically along National Highway 8 in Bharuch.",
+    "darshan": "6:00 AM – 8:15 PM",
+    "contact": {
+      "tel": "(02642) 230222/333, 9998991200",
+      "fax": "(02642) 230111",
+      "email": "info.bharuch@baps.org"
+    },
+    "lat": 21.7126,
+    "lng": 73.0020,
+    "region": "asia"
   }
+
 
 ]
