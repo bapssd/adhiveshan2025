@@ -548,9 +548,6 @@
                     <p id="question-text">Which mandir is this beautiful murti from?</p>
                     <div class="game-options" id="game-options"></div>
                     <button class="start-game-btn" id="next-question" onclick="nextQuestion()" style="display: none;">Next Question</button>
-
-                    <div id="quiz-complete-message" style="display: none;"></div>
-
                 </div>
                 <div id="game-message">
                     <p>Visit at least 2 mandirs to unlock the quiz!</p>
@@ -793,25 +790,18 @@
         // Start the quiz game
         function startGame() {
             if (visitedMandirs.length < 2) return;
-        
+            
             gameScore = 0;
-            currentStreak = 0;
             currentQuestion = 0;
             generateQuizQuestions();
-        
+            
             document.getElementById('start-game').style.display = 'none';
             document.getElementById('game-content').style.display = 'block';
             document.getElementById('game-message').style.display = 'none';
-        
-            // Restore UI elements
-            document.getElementById('murti-image').style.display = '';
-            document.getElementById('question-text').style.display = '';
-            document.getElementById('game-options').style.display = '';
-            document.getElementById('next-question').style.display = 'none';
-            document.getElementById('quiz-complete-message').style.display = 'none';
-        
+            
             showQuestion();
         }
+
 
 
 
@@ -916,28 +906,19 @@
             if (gameScore === quizQuestions.length) {
                 message = 'Perfect! You know your mandirs well!';
                 createConfetti();
-            } else if (gameScore >= quizQuestions.length / 2) {
+            } else if (gameScore >= quizQuestions.length/2) {
                 message = 'Great job! Keep visiting more mandirs!';
             } else {
                 message = 'Keep exploring and learning about these beautiful mandirs!';
             }
-        
-            // Hide quiz UI
-            document.getElementById('murti-image').style.display = 'none';
-            document.getElementById('question-text').style.display = 'none';
-            document.getElementById('game-options').style.display = 'none';
-            document.getElementById('next-question').style.display = 'none';
-        
-            // Show end message
-            const messageDiv = document.getElementById('quiz-complete-message');
-            messageDiv.innerHTML = `
+            
+            document.getElementById('game-content').innerHTML = `
                 <h3>🎉 Quiz Complete!</h3>
                 <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
                 <p>${message}</p>
                 <p>Your highest streak: ${highestStreak} 🔥</p>
                 <button class="start-game-btn" onclick="startGame()">Play Again</button>
             `;
-            messageDiv.style.display = 'block';
         }
 
 
