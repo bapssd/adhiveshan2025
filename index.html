@@ -470,6 +470,35 @@
             box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
         }
 
+        .chat-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .chat-options button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-options button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        #mandir-select {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            flex: 1;
+        }
+
         @media (max-width: 768px) {
             .reset-btn {
                 margin-left: 0;
@@ -595,27 +624,21 @@
                 <h2>🤖 Mandir Guide Assistant</h2>
                 <div class="chat-messages" id="chat-messages">
                     <div class="message bot">
-                        <p>Namaste! I'm your Mandir Guide. Ask me about darshan timings, mandir locations, or interesting facts about any BAPS mandir!</p>
+                        <p>Namaste! I can help you with information about BAPS mandirs. What would you like to know about?</p>
+                        <div class="chat-options">
+                            <button onclick="selectChatOption('timings')">🕒 Darshan Timings</button>
+                            <button onclick="selectChatOption('location')">📍 Location</button>
+                            <button onclick="selectChatOption('contact')">📞 Contact Info</button>
+                            <button onclick="selectChatOption('facts')">✨ Interesting Facts</button>
+                        </div>
                     </div>
                 </div>
-                <div class="chat-input">
-                    <input type="text" id="chat-input" placeholder="Ask about mandir timings, locations, or facts..." onkeypress="handleEnter(event)">
-                    <button onclick="sendMessage()">Send</button>
-                </div>
-                
-                <div class="fun-facts">
-                    <div class="fact-card" onclick="showFact('akshardham')">
-                        <h3>🏛️ Akshardham Delhi</h3>
-                        <p>Click for amazing facts!</p>
-                    </div>
-                    <div class="fact-card" onclick="showFact('atlanta')">
-                        <h3>🌟 Atlanta Mandir</h3>
-                        <p>Discover its history!</p>
-                    </div>
-                    <div class="fact-card" onclick="showFact('london')">
-                        <h3>👑 London Mandir</h3>
-                        <p>Learn about Neasden!</p>
-                    </div>
+                <div class="chat-input" style="display: none;" id="mandir-selection">
+                    <select id="mandir-select">
+                        <option value="">Select a mandir</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <button onclick="submitMandirSelection()">Submit</button>
                 </div>
             </div>
         </div>
@@ -1168,6 +1191,102 @@
                     map.invalidateSize();
                 }, 100);
             }
+        }
+
+        let currentChatState = 'initial';
+        let currentQueryType = '';
+        
+        function selectChatOption(option) {
+            currentQueryType = option;
+            currentChatState = 'selecting_mandir';
+            
+            // Populate mandir dropdown
+            const select = document.getElementById('mandir-select');
+            select.innerHTML = '<option value="">Select a mandir</option>';
+            
+            mandirs.forEach(mandir => {
+                const opt = document.createElement('option');
+                opt.value = mandir.id;
+                opt.textContent = mandir.name.replace('BAPS Shri Swaminarayan Mandir ', '');
+                select.appendChild(opt);
+            });
+            
+            // Show mandir selection UI
+            document.getElementById('mandir-selection').style.display = 'flex';
+            
+            // Add bot message based on selection
+            let question = '';
+            switch(option) {
+                case 'timings':
+                    question = "Which mandir's darshan timings would you like to see?";
+                    break;
+                case 'location':
+                    question = "Which mandir's location would you like to know?";
+                    break;
+                case 'contact':
+                    question = "Which mandir's contact information would you like?";
+                    break;
+                case 'facts':
+                    question = "Which mandir would you like to learn interesting facts about?";
+                    break;
+            }
+            
+            addMessage(question, 'bot');
+        }
+        
+        function submitMandirSelection() {
+            const mandirId = document.getElementById('mandir-select').value;
+            if (!mandirId) return;
+            
+            const mandir = mandirs.find(m => m.id == mandirId);
+            if (!mandir) return;
+            
+            // Hide selection UI
+            document.getElementById('mandir-selection').style.display = 'none';
+            
+            // Generate response based on query type
+            let response = '';
+            switch(currentQueryType) {
+                case 'timings':
+                    response = `<b>${mandir.name}</b><br>`;
+                    response += `🕒 Darshan Timings: ${mandir.darshan}`;
+                    break;
+                case 'location':
+                    response = `<b>${mandir.name}</b><br>`;
+                    response += `📍 Location: ${mandir.location}`;
+                    break;
+                case 'contact':
+                    response = `<b>${mandir.name}</b><br>`;
+                    if (mandir.contact.tel) response += `📞 Phone: ${mandir.contact.tel}<br>`;
+                    if (mandir.contact.fax) response += `📠 Fax: ${mandir.contact.fax}<br>`;
+                    if (mandir.contact.email) response += `✉️ Email: ${mandir.contact.email}`;
+                    break;
+                case 'facts':
+                    response = `<b>${mandir.name}</b><br>`;
+                    response += `✨ Interesting Fact: ${mandir.facts}`;
+                    break;
+            }
+            
+            // Add visited status if applicable
+            if (!visitedMandirs.includes(mandir.id)) {
+                response += `<br><br>You haven't visited this mandir yet! Click on it in the map to mark it as visited.`;
+            }
+            
+            addMessage(response, 'bot');
+            
+            // Reset conversation
+            setTimeout(() => {
+                addMessage("What else would you like to know about?", 'bot');
+                document.querySelector('.chat-messages').lastElementChild.innerHTML += `
+                    <div class="chat-options">
+                        <button onclick="selectChatOption('timings')">🕒 Darshan Timings</button>
+                        <button onclick="selectChatOption('location')">📍 Location</button>
+                        <button onclick="selectChatOption('contact')">📞 Contact Info</button>
+                        <button onclick="selectChatOption('facts')">✨ Interesting Facts</button>
+                    </div>
+                `;
+                currentChatState = 'initial';
+            }, 500);
         }
 
         // Chatbot functionality
