@@ -216,12 +216,13 @@
         }
 
         .murti-image {
-            width: 300px;
-            height: 200px;
-            object-fit: cover;
+            width: 400px; /* Increased from 300px */
+            height: 300px; /* Increased from 200px */
+            object-fit: contain; /* Changed from 'cover' to 'contain' to prevent cutting */
             border-radius: 15px;
             margin: 20px auto;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background-color: #f5f5f5; /* Added background for better visibility */
         }
 
         .game-options {
@@ -273,23 +274,32 @@
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            height: 70vh; /* Makes it take 70% of viewport height */
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-messages {
-            height: 300px;
+            flex: 1; /* Takes all available space */
             overflow-y: auto;
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
             background: #f9f9f9;
+            min-height: 300px; /* Minimum height */
+        }
+
+        .chat-input input {
+            padding: 15px; /* Increased from 12px */
+            font-size: 1.1em; /* Slightly larger text */
         }
 
         .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            max-width: 80%;
+            margin-bottom: 20px; /* Increased from 15px */
+            padding: 15px; /* Increased from 10px 15px */
+            font-size: 1.1em; /* Slightly larger text */
+            line-height: 1.5; /* Better readability */
         }
 
         .message.user {
@@ -609,7 +619,7 @@
                 <button class="start-game-btn" id="start-game" onclick="startGame()">Start Quiz</button>
                 <div id="game-content" style="display: none;">
                     <img id="murti-image" class="murti-image" alt="Murti Darshan">
-                    <p id="question-text">Which mandir is this beautiful murti from?</p>
+                    <p id="question-text">Which mandir is this murti from?</p>
                     <div class="game-options" id="game-options"></div>
                     <button class="start-game-btn" id="next-question" onclick="nextQuestion()" style="display: none;">Next Question</button>
                 </div>
@@ -624,7 +634,7 @@
                 <h2>🤖 Mandir Guide Assistant</h2>
                 <div class="chat-messages" id="chat-messages">
                     <div class="message bot">
-                        <p>Namaste! I can help you with information about BAPS mandirs. What would you like to know about?</p>
+                        <p>Jay Swaminarayan! I can help you with information about BAPS mandirs. What would you like to know about?</p>
                         <div class="chat-options">
                             <button onclick="selectChatOption('timings')">🕒 Darshan Timings</button>
                             <button onclick="selectChatOption('location')">📍 Location</button>
@@ -674,7 +684,7 @@
             constructor(mandirs) {
                 this.mandirs = mandirs;
                 this.generalResponses = {
-                    greeting: "Namaste! I can help you with information about BAPS mandirs worldwide. Ask me about darshan timings, locations, or interesting facts!",
+                    greeting: "Jay Swaminarayan! I can help you with information about BAPS mandirs worldwide. Ask me about darshan timings, locations, or interesting facts!",
                     farewell: "Thank you for using the BAPS Mandir Guide. Jai Swaminarayan!",
                     help: "You can ask me things like:<br>" +
                         "- When is the London mandir open?<br>" +
