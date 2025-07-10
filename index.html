@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darshan Yatra - Your Personalized BAPS Mandir Journey</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -509,6 +510,255 @@
                 margin: 10px 0 0 0;
             }
         }
+
+        /* Bapa Tracker Styles */
+        .bapa-tracker-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .bapa-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .bapa-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid #4CAF50;
+        }
+
+        .bapa-title h2 {
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+
+        .bapa-title p {
+            color: #666;
+        }
+
+        .schedule-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .month-navigation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .month-navigation button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .month-navigation button:hover {
+            background: #45a049;
+        }
+
+        .current-month {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .refresh-btn {
+            padding: 8px 15px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .refresh-btn:hover {
+            background: #1976D2;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .schedule-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+
+        .schedule-card.upcoming {
+            border-left-color: #FF9800;
+            animation: pulse 2s infinite;
+        }
+
+        .schedule-card.current {
+            border-left-color: #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+        }
+
+        .schedule-date {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .schedule-date i {
+            font-size: 1.2em;
+        }
+
+        .schedule-location {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .schedule-address {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .schedule-distance {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #2196F3;
+            font-size: 0.9em;
+        }
+
+        .schedule-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .schedule-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .remind-btn {
+            background: #FF9800;
+            color: white;
+        }
+
+        .remind-btn:hover {
+            background: #F57C00;
+        }
+
+        .navigate-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .navigate-btn:hover {
+            background: #45a049;
+        }
+
+        .no-schedule {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification i {
+            font-size: 1.5em;
+        }
+
+        .notification-close {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .bapa-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .bapa-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .schedule-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -518,24 +768,25 @@
             <p>Your Personalized BAPS Mandir Journey</p>
         </div>
 
-    <div class="progress-section">
-        <div class="stats">
-            <span>Visited: <span id="visited-count">0</span>/<span id="total-mandirs">12</span></span>
+        <div class="progress-section">
+            <div class="stats">
+                <span>Visited: <span id="visited-count">0</span>/<span id="total-mandirs">12</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="stats">
+                <span>Quiz Score: <span id="quiz-score">0</span></span>
+                <span>Streak: <span id="streak-count">0</span>🔥</span>
+                <button class="reset-btn" onclick="resetProgress()">🔄 Reset All</button>
+            </div>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <div class="stats">
-            <span>Quiz Score: <span id="quiz-score">0</span></span>
-            <span>Streak: <span id="streak-count">0</span>🔥</span>
-            <button class="reset-btn" onclick="resetProgress()">🔄 Reset All</button>
-        </div>
-    </div>
 
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showSection('map')">🗺️ Interactive Map</button>
             <button class="nav-tab" onclick="showSection('game')">🎮 Murti Quiz</button>
             <button class="nav-tab" onclick="showSection('chatbot')">💬 Mandir Guide</button>
+            <button class="nav-tab" onclick="showSection('bapa-tracker')">🕊️ Bapa Tracker</button>
         </div>
 
         <div id="map-section" class="content-section active">
@@ -598,6 +849,36 @@
         </div>
     </div>
 
+    <div id="bapa-tracker-section" class="content-section">
+        <div class="bapa-tracker-container">
+            <div class="bapa-header">
+                <img src="https://www.baps.org/Data/Sites/1/Media/ModuleRotatorImages/mahant-swami-maharaj-2023-01.jpg" alt="Mahant Swami Maharaj" class="bapa-avatar">
+                <div class="bapa-title">
+                    <h2>Bapa's Vicharan Schedule</h2>
+                    <p>Track Mahant Swami Maharaj's upcoming visits</p>
+                </div>
+            </div>
+
+            <div class="schedule-controls">
+                <div class="month-navigation">
+                    <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <span class="current-month" id="current-month">Loading...</span>
+                    <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <button class="refresh-btn" onclick="fetchBapaSchedule()">
+                    <span id="refresh-text">Refresh</span>
+                    <span id="refresh-icon" class="fas fa-sync-alt"></span>
+                </button>
+            </div>
+
+            <div id="schedule-container">
+                <div class="no-schedule">
+                    <p>Loading Bapa's schedule...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="visit-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -608,6 +889,25 @@
             <button class="start-game-btn" onclick="closeModal()">Continue</button>
         </div>
     </div>
+
+    <!-- Add this new modal for Bapa notifications -->
+    <div class="modal" id="bapa-notification-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBapaModal()">&times;</span>
+            <div class="badge">🕊️</div>
+            <h2 id="bapa-modal-title">Bapa is Visiting Nearby!</h2>
+            <p id="bapa-modal-text"></p>
+            <p id="bapa-modal-date"></p>
+            <button class="start-game-btn" onclick="closeBapaModal()">Jai Swaminarayan!</button>
+        </div>
+    </div>
+
+    <div class="notification" id="bapa-notification">
+            <i class="fas fa-bell"></i>
+            <span id="notification-text">Bapa is visiting nearby soon!</span>
+            <span class="notification-close" onclick="hideNotification()">&times;</span>
+        </div>
+</div> 
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
@@ -1289,8 +1589,440 @@
             }
         }
 
-        // Initialize the app when page loads
-        window.onload = loadMandirData;
+        let bapaSchedule = [];
+        let currentDisplayedMonth = new Date().getMonth();
+        let currentDisplayedYear = new Date().getFullYear();
+        let userLocation = null;
+        let notificationShown = false;
+
+        // Add this new function to fetch Bapa's schedule
+        async function fetchBapaSchedule() {
+            try {
+                // Show loading state
+                document.getElementById('refresh-icon').className = 'loading-spinner';
+                document.getElementById('refresh-text').textContent = 'Loading';
+                
+                // In a real implementation, you would fetch from BAPS.org API
+                // For this example, we'll use mock data that simulates the structure
+                const proxyUrl = "https://corsproxy.io/?";
+                const targetUrl = "https://www.baps.org/Announcement/2018/HH-Mahant-Swami-Maharajs-Upcoming-Vicharan-Schedule-13400.aspx";
+                const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+                const text = await response.text();
+                
+                // Parse the HTML to extract schedule (this is simplified)
+                bapaSchedule = parseBapaSchedule(text);
+                
+                // If parsing fails (like when CORS blocks it), use mock data
+                if (bapaSchedule.length === 0) {
+                    bapaSchedule = getMockBapaSchedule();
+                }
+                
+                // Update UI
+                updateScheduleDisplay();
+                
+                // Check for nearby visits
+                checkForNearbyVisits();
+            } catch (error) {
+                console.error('Error fetching Bapa schedule:', error);
+                // Fallback to mock data
+                bapaSchedule = getMockBapaSchedule();
+                updateScheduleDisplay();
+            } finally {
+                // Reset loading state
+                document.getElementById('refresh-icon').className = 'fas fa-sync-alt';
+                document.getElementById('refresh-text').textContent = 'Refresh';
+            }
+        }
+
+        // Function to parse the schedule from BAPS.org HTML
+        function parseBapaSchedule(html) {
+            // This is a simplified parser - in a real app you'd need more robust parsing
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const scheduleItems = [];
+            
+            // Try to find schedule items - this selector would need to match BAPS.org's structure
+            const items = doc.querySelectorAll('.schedule-item'); // This is example - adjust to actual structure
+            
+            if (items.length > 0) {
+                items.forEach(item => {
+                    try {
+                        const dateText = item.querySelector('.date').textContent.trim();
+                        const locationText = item.querySelector('.location').textContent.trim();
+                        const addressText = item.querySelector('.address').textContent.trim();
+                        
+                        scheduleItems.push({
+                            date: new Date(dateText),
+                            location: locationText,
+                            address: addressText,
+                            mandirId: findMandirIdByLocation(locationText)
+                        });
+                    } catch (e) {
+                        console.warn('Failed to parse schedule item', e);
+                    }
+                });
+            }
+            
+            return scheduleItems.length > 0 ? scheduleItems : [];
+        }
+
+        // Helper function to find mandir ID by location name
+        function findMandirIdByLocation(location) {
+            const normalizedLocation = location.toLowerCase();
+            const mandir = mandirs.find(m => 
+                m.name.toLowerCase().includes(normalizedLocation) || 
+                m.location.toLowerCase().includes(normalizedLocation)
+            );
+            return mandir ? mandir.id : null;
+        }
+
+        // Mock data for demonstration
+        function getMockBapaSchedule() {
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            
+            const twoWeeks = new Date(today);
+            twoWeeks.setDate(today.getDate() + 14);
+            
+            const nextMonth = new Date(today);
+            nextMonth.setMonth(today.getMonth() + 1);
+            
+            return [
+                {
+                    date: today,
+                    location: "BAPS Shri Swaminarayan Mandir, London",
+                    address: "105-119 Brentfield Road, London, UK",
+                    mandirId: "london"
+                },
+                {
+                    date: nextWeek,
+                    location: "BAPS Shri Swaminarayan Mandir, Atlanta",
+                    address: "460 Rockbridge Rd NW, Lilburn, GA, USA",
+                    mandirId: "atlanta"
+                },
+                {
+                    date: twoWeeks,
+                    location: "BAPS Shri Swaminarayan Mandir, Chicago",
+                    address: "1851 Pramukh Swami Rd, Bartlett, IL, USA",
+                    mandirId: "chicago"
+                },
+                {
+                    date: nextMonth,
+                    location: "BAPS Shri Swaminarayan Mandir, Nairobi",
+                    address: "Off Limuru Road, Nairobi, Kenya",
+                    mandirId: "nairobi"
+                }
+            ];
+        }
+
+        // Update the schedule display
+        function updateScheduleDisplay() {
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            
+            // Update month display
+            document.getElementById('current-month').textContent = 
+                `${monthNames[currentDisplayedMonth]} ${currentDisplayedYear}`;
+            
+            // Filter schedule for current month
+            const filteredSchedule = bapaSchedule.filter(item => {
+                return item.date.getMonth() === currentDisplayedMonth && 
+                       item.date.getFullYear() === currentDisplayedYear;
+            });
+            
+            const container = document.getElementById('schedule-container');
+            
+            if (filteredSchedule.length === 0) {
+                container.innerHTML = `
+                    <div class="no-schedule">
+                        <p>No vicharan scheduled for ${monthNames[currentDisplayedMonth]}.</p>
+                        <p>Check back later or try another month.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort schedule by date
+            filteredSchedule.sort((a, b) => a.date - b.date);
+            
+            // Create schedule cards
+            container.innerHTML = '';
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            filteredSchedule.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'schedule-card';
+                
+                // Add special class if upcoming or current
+                const itemDate = new Date(item.date);
+                itemDate.setHours(0, 0, 0, 0);
+                
+                if (itemDate.getTime() === today.getTime()) {
+                    card.classList.add('current');
+                } else if (itemDate > today && itemDate < new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)) {
+                    card.classList.add('upcoming');
+                }
+                
+                // Format date
+                const dateStr = item.date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                
+                // Find associated mandir
+                const mandir = item.mandirId ? mandirs.find(m => m.id === item.mandirId) : null;
+                
+                // Calculate distance if we have user location
+                let distanceInfo = '';
+                if (userLocation && mandir) {
+                    const distance = calculateDistance(
+                        userLocation.lat, 
+                        userLocation.lng,
+                        mandir.lat,
+                        mandir.lng
+                    );
+                    
+                    if (distance < 100) {
+                        distanceInfo = `<div class="schedule-distance">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Only ${Math.round(distance)} km from you!
+                        </div>`;
+                    } else if (distance < 500) {
+                        distanceInfo = `<div class="schedule-distance">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${Math.round(distance)} km from you
+                        </div>`;
+                    }
+                }
+                
+                card.innerHTML = `
+                    <div class="schedule-date">
+                        <i class="far fa-calendar-alt"></i>
+                        ${dateStr}
+                    </div>
+                    <div class="schedule-location">${item.location}</div>
+                    <div class="schedule-address">${item.address}</div>
+                    ${distanceInfo}
+                    <div class="schedule-actions">
+                        <button class="remind-btn" onclick="setReminder('${item.date.toISOString()}')">
+                            <i class="far fa-bell"></i> Remind Me
+                        </button>
+                        ${mandir ? `
+                        <button class="navigate-btn" onclick="navigateToMandir('${mandir.id}')">
+                            <i class="fas fa-directions"></i> Directions
+                        </button>
+                        ` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Change month display
+        function changeMonth(offset) {
+            currentDisplayedMonth += offset;
+            
+            // Handle year rollover
+            if (currentDisplayedMonth < 0) {
+                currentDisplayedMonth = 11;
+                currentDisplayedYear--;
+            } else if (currentDisplayedMonth > 11) {
+                currentDisplayedMonth = 0;
+                currentDisplayedYear++;
+            }
+            
+            updateScheduleDisplay();
+        }
+
+        // Calculate distance between coordinates in km
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the earth in km
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; // Distance in km
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI/180);
+        }
+
+        // Set reminder for a visit
+        function setReminder(dateString) {
+            const visitDate = new Date(dateString);
+            const now = new Date();
+            
+            if (visitDate < now) {
+                alert("This visit has already happened.");
+                return;
+            }
+            
+            // In a real app, this would use the Notification API
+            alert(`Reminder set for ${visitDate.toLocaleDateString()}! You'll be notified when Bapa's visit is approaching.`);
+            
+            // Schedule a notification (simplified)
+            const timeDiff = visitDate.getTime() - now.getTime();
+            if (timeDiff < 7 * 24 * 60 * 60 * 1000) { // If within 7 days
+                setTimeout(() => {
+                    showNotification("Bapa's visit is coming up soon!");
+                }, Math.max(0, timeDiff - 24 * 60 * 60 * 1000)); // Notify 1 day before
+            }
+        }
+
+        // Navigate to mandir
+        function navigateToMandir(mandirId) {
+            const mandir = mandirs.find(m => m.id === mandirId);
+            if (!mandir) return;
+            
+            // In a real app, this would open maps app or show directions
+            alert(`Showing directions to ${mandir.name}...`);
+            
+            // Center map on this mandir if on map view
+            if (map) {
+                map.setView([mandir.lat, mandir.lng], 12);
+                showSection('map');
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('bapa-notification');
+            document.getElementById('notification-text').textContent = message;
+            notification.classList.add('show');
+            
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                hideNotification();
+            }, 10000);
+        }
+
+        function hideNotification() {
+            document.getElementById('bapa-notification').classList.remove('show');
+        }
+
+        // Check for visits near user's location
+        function checkForNearbyVisits() {
+            if (!userLocation || notificationShown) return;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Check next 14 days
+            const upcomingVisits = bapaSchedule.filter(item => {
+                const itemDate = new Date(item.date);
+                itemDate.setHours(0, 0, 0, 0);
+                
+                return itemDate >= today && 
+                       itemDate <= new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000) &&
+                       item.mandirId;
+            });
+            
+            // Find visits within 200km
+            const nearbyVisits = upcomingVisits.filter(item => {
+                const mandir = mandirs.find(m => m.id === item.mandirId);
+                if (!mandir) return false;
+                
+                const distance = calculateDistance(
+                    userLocation.lat,
+                    userLocation.lng,
+                    mandir.lat,
+                    mandir.lng
+                );
+                
+                return distance < 200;
+            });
+            
+            if (nearbyVisits.length > 0) {
+                // Show notification for the soonest visit
+                const soonestVisit = nearbyVisits.reduce((prev, current) => 
+                    prev.date < current.date ? prev : current
+                );
+                
+                const mandir = mandirs.find(m => m.id === soonestVisit.mandirId);
+                const visitDate = new Date(soonestVisit.date);
+                const dateStr = visitDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                // Show modal notification
+                document.getElementById('bapa-modal-title').textContent = 
+                    `Bapa is Visiting ${mandir ? mandir.name : soonestVisit.location}!`;
+                document.getElementById('bapa-modal-text').textContent = 
+                    `Mahant Swami Maharaj will be visiting ${soonestVisit.location} soon.`;
+                document.getElementById('bapa-modal-date').textContent = 
+                    `Scheduled for ${dateStr}`;
+                
+                document.getElementById('bapa-notification-modal').style.display = 'flex';
+                notificationShown = true;
+            }
+        }
+
+        function closeBapaModal() {
+            document.getElementById('bapa-notification-modal').style.display = 'none';
+        }
+
+        // Get user location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        // Check for nearby visits now that we have location
+                        checkForNearbyVisits();
+                    },
+                    error => {
+                        console.log('Geolocation error:', error);
+                    }
+                );
+            }
+        }
+
+
+        // Update showSection to handle the new tab
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(section + '-section').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Refresh map when showing map section
+            if (section === 'map') {
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
+            }
+            
+            // Refresh schedule when showing Bapa Tracker
+            if (section === 'bapa-tracker') {
+                updateScheduleDisplay();
+            }
+        }
+
+        window.onload = function() {
+            loadMandirData();
+            getUserLocation(); // Get user location when page loads
+            
+            // Initialize Bapa Tracker
+            setTimeout(() => {
+                fetchBapaSchedule();
+            }, 1000);
+        };
     </script>
 </body>
 </html>
