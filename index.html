@@ -453,6 +453,30 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
+        .reset-btn {
+            padding: 5px 10px;
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .reset-btn {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -491,6 +515,16 @@
                 right: 20px;
                 padding: 10px;
             }
+
+            .stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            .reset-btn {
+                margin: 10px 0 0 0;
+            }
         }
     </style>
 </head>
@@ -501,18 +535,19 @@
             <p>Your Personalized BAPS Mandir Journey</p>
         </div>
 
-        <div class="progress-section">
-            <div class="stats">
-                <span>Visited: <span id="visited-count">0</span>/<span id="total-mandirs">12</span></span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div class="stats">
-                <span>Quiz Score: <span id="quiz-score">0</span></span>
-                <span>Streak: <span id="streak-count">0</span>🔥</span>
-            </div>
+    <div class="progress-section">
+        <div class="stats">
+            <span>Visited: <span id="visited-count">0</span>/<span id="total-mandirs">12</span></span>
         </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="stats">
+            <span>Quiz Score: <span id="quiz-score">0</span></span>
+            <span>Streak: <span id="streak-count">0</span>🔥</span>
+            <button class="reset-btn" onclick="resetProgress()">🔄 Reset All</button>
+        </div>
+    </div>
 
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showSection('map')">🗺️ Interactive Map</button>
@@ -1177,6 +1212,44 @@
                 addMessage(fact, 'bot');
             } else {
                 addMessage("I couldn't find that mandir. Try asking about a specific mandir!", 'bot');
+            }
+        }
+
+        function resetProgress() {
+            // Confirm with user before resetting
+            if (confirm("Are you sure you want to reset all progress? This will clear all visited mandirs and quiz scores.")) {
+                // Clear local storage
+                localStorage.clear();
+                
+                // Reset all variables
+                visitedMandirs = [];
+                gameScore = 0;
+                currentStreak = 0;
+                highestStreak = 0;
+                
+                // Update UI
+                updateProgress();
+                updateGameButton();
+                
+                // Reset map markers
+                markers.forEach(markerObj => {
+                    const mandir = mandirs.find(m => m.id === markerObj.id);
+                    updateMarker(mandir, false);
+                });
+                
+                // Update score displays
+                document.getElementById('quiz-score').textContent = '0';
+                document.getElementById('streak-count').textContent = '0';
+                
+                // Reset game if it's active
+                if (document.getElementById('game-content').style.display === 'block') {
+                    document.getElementById('game-content').style.display = 'none';
+                    document.getElementById('start-game').style.display = 'block';
+                    document.getElementById('game-message').style.display = 'block';
+                    document.getElementById('game-message').innerHTML = '<p>Visit at least 2 mandirs to unlock the quiz!</p>';
+                }
+                
+                alert("All progress has been reset. Your journey starts fresh!");
             }
         }
 
