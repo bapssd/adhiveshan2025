@@ -790,6 +790,16 @@
         // Start the quiz game
         function startGame() {
             if (visitedMandirs.length < 2) return;
+
+            // Remove any previous results
+            const result = document.getElementById('game-result');
+            if (result) result.remove();
+        
+            // Show game elements again
+            document.getElementById('murti-image').style.display = 'block';
+            document.getElementById('question-text').style.display = 'block';
+            document.getElementById('game-options').style.display = 'block';
+            document.getElementById('next-question').style.display = 'none';
             
             gameScore = 0;
             currentQuestion = 0;
@@ -907,7 +917,10 @@
             } else {
                 message = 'Keep exploring and learning about these beautiful mandirs!';
             }
-            
+            document.getElementById('murti-image').style.display = 'none';
+            document.getElementById('question-text').style.display = 'none';
+            document.getElementById('game-options').style.display = 'none';
+            document.getElementById('next-question').style.display = 'none';
             document.getElementById('game-content').innerHTML = `
                 <h3>🎉 Quiz Complete!</h3>
                 <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
