@@ -611,12 +611,176 @@
         let markers = [];
         let currentRegionFilter = 'all';
 
+        // Chatbot class
+        class BAPSMandirChatbot {
+            constructor(mandirs) {
+                this.mandirs = mandirs;
+                this.generalResponses = {
+                    greeting: "Namaste! I can help you with information about BAPS mandirs worldwide. Ask me about darshan timings, locations, or interesting facts!",
+                    farewell: "Thank you for using the BAPS Mandir Guide. Jai Swaminarayan!",
+                    help: "You can ask me things like:<br>" +
+                        "- When is the London mandir open?<br>" +
+                        "- Where is the Atlanta mandir located?<br>" +
+                        "- What's special about the Nairobi mandir?<br>" +
+                        "- Show me mandirs in North America<br>" +
+                        "- Contact info for Chicago mandir",
+                    unknown: "I'm not sure about that. Try asking about specific mandirs or their darshan timings."
+                };
+            }
+
+            // Main method to get response
+            getResponse(message) {
+                const lowerMsg = message.toLowerCase().trim();
+                
+                // Handle general queries
+                if (/(hello|hi|namaste)/i.test(lowerMsg)) return this.generalResponses.greeting;
+                if (/(bye|goodbye|farewell)/i.test(lowerMsg)) return this.generalResponses.farewell;
+                if (/(help|what can you do)/i.test(lowerMsg)) return this.generalResponses.help;
+                
+                // Check for mandir-specific queries
+                const mandirMatch = this.findMandirInQuery(lowerMsg);
+                if (mandirMatch) {
+                    return this.handleMandirQuery(mandirMatch.mandir, mandirMatch.queryType, lowerMsg);
+                }
+                
+                // Check for region queries
+                const regionMatch = this.checkForRegionQuery(lowerMsg);
+                if (regionMatch) return this.handleRegionQuery(regionMatch);
+                
+                return this.generalResponses.unknown;
+            }
+
+            // Find which mandir is being asked about
+            findMandirInQuery(query) {
+                for (const mandir of this.mandirs) {
+                    // Check if query contains mandir name or location
+                    const nameParts = mandir.name.toLowerCase().split(' ');
+                    const locationParts = mandir.location.toLowerCase().split(',')[0].split(' ');
+                    
+                    // Look for matches in name (skip "BAPS Shri Swaminarayan Mandir" part)
+                    const searchTerms = [...nameParts.slice(3), ...locationParts];
+                    
+                    for (const term of searchTerms) {
+                        if (term.length > 3 && query.includes(term)) {
+                            return {
+                                mandir: mandir,
+                                queryType: this.detectQueryType(query)
+                            };
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // Detect what information is being asked for
+            detectQueryType(query) {
+                if (/(time|when|open|close|darshan|hours?)/.test(query)) return 'timings';
+                if (/(where|location|address|map)/.test(query)) return 'location';
+                if (/(contact|phone|number|email|call)/.test(query)) return 'contact';
+                if (/(fact|special|unique|about)/.test(query)) return 'fact';
+                return 'general';
+            }
+
+            // Generate response for mandir queries
+            handleMandirQuery(mandir, queryType, originalQuery) {
+                let response = `<b>${mandir.name}</b><br>`;
+                
+                switch(queryType) {
+                    case 'timings':
+                        response += `🕒 <i>Darshan Timings:</i> ${mandir.darshan}<br>`;
+                        if (originalQuery.includes('best time')) {
+                            response += `<br>The best time to visit is usually in the morning when it's less crowded.`;
+                        }
+                        break;
+                    case 'location':
+                        response += `📍 <i>Location:</i> ${mandir.location}<br>`;
+                        if (mandir.lat && mandir.lng) {
+                            response += `<br><small>View on map in the Interactive Map section</small>`;
+                        }
+                        break;
+                    case 'contact':
+                        response += `📞 <i>Contact:</i><br>`;
+                        if (mandir.contact.tel) response += `Phone: ${mandir.contact.tel}<br>`;
+                        if (mandir.contact.fax) response += `Fax: ${mandir.contact.fax}<br>`;
+                        if (mandir.contact.email) response += `Email: ${mandir.contact.email}<br>`;
+                        break;
+                    case 'fact':
+                        response += `✨ <i>Interesting Fact:</i> ${mandir.facts}<br>`;
+                        break;
+                    default:
+                        // General info response
+                        response += `📍 <i>Location:</i> ${mandir.location}<br>`;
+                        response += `🕒 <i>Darshan Timings:</i> ${mandir.darshan}<br>`;
+                        response += `📞 <i>Contact:</i> ${mandir.contact.tel || 'N/A'}`;
+                        if (mandir.contact.email) {
+                            response += `<br>✉️ <i>Email:</i> ${mandir.contact.email}`;
+                        }
+                        response += `<br><br>✨ <i>Did you know?</i> ${mandir.facts}`;
+                }
+                
+                if (!visitedMandirs.includes(mandir.id)) {
+                    response += `<br><br>You haven't visited this mandir yet. Click on it in the map to mark it as visited!`;
+                }
+                
+                return response;
+            }
+
+            // Check if user is asking about mandirs in a region
+            checkForRegionQuery(query) {
+                const regions = {
+                    'north america': 'north-america',
+                    'america': 'north-america',
+                    'usa': 'north-america',
+                    'canada': 'north-america',
+                    'europe': 'europe',
+                    'uk': 'europe',
+                    'london': 'europe',
+                    'asia': 'asia',
+                    'india': 'asia',
+                    'africa': 'africa',
+                    'uae': 'other',
+                    'middle east': 'other'
+                };
+                
+                for (const [term, region] of Object.entries(regions)) {
+                    if (query.includes(term)) {
+                        return region;
+                    }
+                }
+                return null;
+            }
+
+            // Generate response for region queries
+            handleRegionQuery(region) {
+                const regionMandirs = this.mandirs.filter(m => m.region === region);
+                if (regionMandirs.length === 0) {
+                    return "I couldn't find any mandirs in that region.";
+                }
+                
+                let response = `Here are the BAPS mandirs in ${region.replace('-', ' ')}:<br><br>`;
+                regionMandirs.forEach(mandir => {
+                    response += `<b>${mandir.name}</b><br>`;
+                    response += `${mandir.location}<br>`;
+                    response += `<small>Darshan: ${mandir.darshan}</small><br><br>`;
+                });
+                
+                return response;
+            }
+        }
+
+        // Initialize chatbot
+        let mandirChatbot;
+
         // Load mandir data from JSON
         async function loadMandirData() {
             try {
                 const response = await fetch('data/mandirs.json');
                 mandirs = await response.json();
                 document.getElementById('total-mandirs').textContent = mandirs.length;
+                
+                // Initialize chatbot with mandir data
+                mandirChatbot = new BAPSMandirChatbot(mandirs);
+                
                 initMap();
                 updateProgress();
                 updateGameButton();
@@ -802,10 +966,6 @@
             showQuestion();
         }
 
-
-
-
-
         // Generate quiz questions
         function generateQuizQuestions() {
             quizQuestions = [];
@@ -921,9 +1081,6 @@
             `;
         }
 
-
-
-
         // Show section
         function showSection(section) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -949,11 +1106,11 @@
             addMessage(message, 'user');
             input.value = '';
             
-            // Simulate bot response
+            // Get bot response
             setTimeout(() => {
-                const response = getBotResponse(message);
+                const response = mandirChatbot.getResponse(message);
                 addMessage(response, 'bot');
-            }, 1000);
+            }, 500);
         }
 
         function addMessage(text, type) {
@@ -965,45 +1122,6 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function getBotResponse(message) {
-            const lowerMessage = message.toLowerCase();
-            
-            // Check if asking about a specific mandir
-            const mandirMatch = mandirs.find(m => 
-                lowerMessage.includes(m.name.toLowerCase().split(' ')[0]) || 
-                lowerMessage.includes(m.location.toLowerCase().split(',')[0])
-            );
-            
-            if (mandirMatch) {
-                let response = `<b>${mandirMatch.name}</b><br>`;
-                response += `<i>${mandirMatch.location}</i><br><br>`;
-                response += `<b>Darshan Timings:</b> ${mandirMatch.darshan}<br>`;
-                response += `<b>Contact:</b> ${mandirMatch.contact.tel || 'N/A'}`;
-                if (mandirMatch.contact.email) {
-                    response += `<br><b>Email:</b> ${mandirMatch.contact.email}`;
-                }
-                response += `<br><br><b>Did you know?</b> ${mandirMatch.facts}`;
-                
-                if (!visitedMandirs.includes(mandirMatch.id)) {
-                    response += `<br><br>You haven't visited this mandir yet. Would you like to learn more about planning a visit?`;
-                }
-                
-                return response;
-            }
-            
-            if (lowerMessage.includes('darshan') || lowerMessage.includes('timing')) {
-                return "Most BAPS mandirs are open for darshan from 7:00 AM to 12:00 PM and 4:00 PM to 8:00 PM. For specific timings, please check the individual mandir's website or call them directly.";
-            } else if (lowerMessage.includes('visit') || lowerMessage.includes('plan')) {
-                return "When planning a mandir visit, I recommend checking the mandir's website for current darshan timings, dress code requirements, and any special events. Most mandirs welcome visitors for darshan, cultural programs, and festivals.";
-            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('namaste')) {
-                return "Namaste! How can I help you with your mandir journey today?";
-            } else if (lowerMessage.includes('thank')) {
-                return "You're welcome! Is there anything else you'd like to know about BAPS mandirs?";
-            } else {
-                return "I can help you with information about mandir darshan timings, locations, architecture, and visiting tips. Try asking about specific mandirs like 'Akshardham', 'Atlanta mandir', or 'London mandir'!";
-            }
-        }
-
         function handleEnter(event) {
             if (event.key === 'Enter') {
                 sendMessage();
@@ -1011,21 +1129,17 @@
         }
 
         function showFact(mandir) {
-            let fact = '';
-            switch(mandir) {
-                case 'akshardham':
-                    fact = "Akshardham Delhi took 5 years to build and was completed in 2005. It features 234 ornately carved pillars, 9 ornate domes, and over 20,000 sculptures of devotees, acharyas, and divine figures!";
-                    break;
-                case 'atlanta':
-                    fact = "The Atlanta mandir was built using 34,000 pieces of hand-carved Italian marble and Turkish limestone. It took over 1.3 million hours of skilled craftsmanship and was completed in 2007!";
-                    break;
-                case 'london':
-                    fact = "The London mandir used 2,828 tons of Bulgarian limestone and 2,000 tons of Italian marble. Every single piece was hand-carved in India by over 1,500 skilled artisans!";
-                    break;
-                default:
-                    fact = "BAPS mandirs are architectural marvels that blend ancient Indian craftsmanship with modern engineering techniques!";
+            const mandirData = mandirs.find(m => 
+                m.name.toLowerCase().includes(mandir) || 
+                m.location.toLowerCase().includes(mandir)
+            );
+            
+            if (mandirData) {
+                const fact = `🏛️ <b>${mandirData.name}</b><br>✨ <i>Interesting Fact:</i> ${mandirData.facts}`;
+                addMessage(fact, 'bot');
+            } else {
+                addMessage("I couldn't find that mandir. Try asking about a specific mandir!", 'bot');
             }
-            addMessage(`🏛️ Fun Fact: ${fact}`, 'bot');
         }
 
         // Initialize the app when page loads
