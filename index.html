@@ -548,6 +548,9 @@
                     <p id="question-text">Which mandir is this beautiful murti from?</p>
                     <div class="game-options" id="game-options"></div>
                     <button class="start-game-btn" id="next-question" onclick="nextQuestion()" style="display: none;">Next Question</button>
+
+                    <div id="quiz-complete-message" style="display: none;"></div>
+
                 </div>
                 <div id="game-message">
                     <p>Visit at least 2 mandirs to unlock the quiz!</p>
@@ -791,28 +794,25 @@
         function startGame() {
             if (visitedMandirs.length < 2) return;
         
-            // Remove result if it exists
-            const oldResult = document.getElementById('quiz-result');
-            if (oldResult) oldResult.remove();
-        
-            // Reset state
             gameScore = 0;
             currentStreak = 0;
             currentQuestion = 0;
             generateQuizQuestions();
         
-            // Show quiz UI again
-            document.getElementById('murti-image').style.display = 'block';
-            document.getElementById('question-text').style.display = 'block';
-            document.getElementById('game-options').style.display = 'block';
-            document.getElementById('next-question').style.display = 'none';
-            document.getElementById('game-score').textContent = gameScore;
-            document.getElementById('current-streak').textContent = currentStreak;
-            document.getElementById('game-message').style.display = 'none';
             document.getElementById('start-game').style.display = 'none';
+            document.getElementById('game-content').style.display = 'block';
+            document.getElementById('game-message').style.display = 'none';
+        
+            // Restore UI elements
+            document.getElementById('murti-image').style.display = '';
+            document.getElementById('question-text').style.display = '';
+            document.getElementById('game-options').style.display = '';
+            document.getElementById('next-question').style.display = 'none';
+            document.getElementById('quiz-complete-message').style.display = 'none';
         
             showQuestion();
         }
+
 
 
 
@@ -928,19 +928,18 @@
             document.getElementById('game-options').style.display = 'none';
             document.getElementById('next-question').style.display = 'none';
         
-            // Show result div
-            const resultHTML = `
-                <div id="quiz-result">
-                    <h3>🎉 Quiz Complete!</h3>
-                    <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
-                    <p>${message}</p>
-                    <p>Your highest streak: ${highestStreak} 🔥</p>
-                    <button class="start-game-btn" onclick="startGame()">Play Again</button>
-                </div>
+            // Show end message
+            const messageDiv = document.getElementById('quiz-complete-message');
+            messageDiv.innerHTML = `
+                <h3>🎉 Quiz Complete!</h3>
+                <p>Your final score: ${gameScore} out of ${quizQuestions.length}</p>
+                <p>${message}</p>
+                <p>Your highest streak: ${highestStreak} 🔥</p>
+                <button class="start-game-btn" onclick="startGame()">Play Again</button>
             `;
-        
-            document.getElementById('game-content').insertAdjacentHTML('beforeend', resultHTML);
+            messageDiv.style.display = 'block';
         }
+
 
 
 
