@@ -459,6 +459,22 @@
     "lat": 21.7126,
     "lng": 73.0020,
     "region": "asia"
+  },
+  {
+    "id": 30,
+    "name": "BAPS Shri Swaminarayan Mandir Anand",
+    "location": "Goya Talav, Anand 388001, Gujarat, India",
+    "image": "anand.jpg",
+    "facts": "Spiritual center serving the Anand community in Gujarat",
+    "darshan": "6:00 AM – 8:00 PM",
+    "contact": {
+      "tel": "(02692) 244000, 258400",
+      "fax": "(02692) 253600",
+      "email": ""
+    },
+    "lat": 22.5646,
+    "lng": 72.9289,
+    "region": "asia"
   }
 
 
