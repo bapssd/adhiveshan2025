@@ -577,22 +577,6 @@
             font-size: 1.2em;
         }
 
-        .refresh-btn {
-            padding: 8px 15px;
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .refresh-btn:hover {
-            background: #1976D2;
-        }
-
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -852,7 +836,7 @@
     <div id="bapa-tracker-section" class="content-section">
         <div class="bapa-tracker-container">
             <div class="bapa-header">
-                <img src="https://www.baps.org/Data/Sites/1/Media/ModuleRotatorImages/mahant-swami-maharaj-2023-01.jpg" alt="Mahant Swami Maharaj" class="bapa-avatar">
+                <img src="data/bapa.jpg" alt="Mahant Swami Maharaj" class="bapa-avatar">
                 <div class="bapa-title">
                     <h2>Bapa's Vicharan Schedule</h2>
                     <p>Track Mahant Swami Maharaj's upcoming visits</p>
@@ -865,10 +849,6 @@
                     <span class="current-month" id="current-month">Loading...</span>
                     <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
                 </div>
-                <button class="refresh-btn" onclick="fetchBapaSchedule()">
-                    <span id="refresh-text">Refresh</span>
-                    <span id="refresh-icon" class="fas fa-sync-alt"></span>
-                </button>
             </div>
 
             <div id="schedule-container">
@@ -1589,237 +1569,135 @@
             }
         }
 
-        let bapaSchedule = [];
+        // Bapa Tracker Data and Functions
+        let bapaSchedule = [
+            {
+                date: new Date('2025-01-01'),
+                endDate: new Date('2025-01-28'),
+                location: "BAPS Shri Swaminarayan Mandir, Nairobi",
+                address: "Nairobi, Kenya",
+                mandirId: "nairobi"
+            },
+            {
+                date: new Date('2025-01-28'),
+                endDate: new Date('2025-02-12'),
+                location: "BAPS Shri Swaminarayan Mandir, Johannesburg",
+                address: "Johannesburg, South Africa",
+                mandirId: "johannesburg"
+            },
+            {
+                date: new Date('2025-02-12'),
+                endDate: new Date('2025-03-04'),
+                location: "BAPS Shri Swaminarayan Mandir, Melbourne",
+                address: "Melbourne, Australia",
+                mandirId: "melbourne"
+            },
+            {
+                date: new Date('2025-03-04'),
+                endDate: new Date('2025-04-03'),
+                location: "BAPS Shri Swaminarayan Mandir, Sydney",
+                address: "Sydney, Australia",
+                mandirId: "sydney"
+            },
+            {
+                date: new Date('2025-04-03'),
+                endDate: new Date('2025-06-15'),
+                location: "BAPS Shri Swaminarayan Mandir, Surat",
+                address: "Surat, India",
+                mandirId: "surat"
+            },
+            {
+                date: new Date('2025-06-15'),
+                endDate: new Date('2025-07-05'),
+                location: "BAPS Shri Swaminarayan Mandir, Bharuch",
+                address: "Bharuch, India",
+                mandirId: "bharuch"
+            },
+            {
+                date: new Date('2025-07-05'),
+                endDate: new Date('2025-07-29'),
+                location: "BAPS Shri Swaminarayan Mandir, Bochasan",
+                address: "Bochasan, India",
+                mandirId: "bochasan"
+            },
+            {
+                date: new Date('2025-07-29'),
+                endDate: new Date('2025-08-18'),
+                location: "BAPS Shri Swaminarayan Mandir, Anand",
+                address: "Anand, India",
+                mandirId: "anand"
+            }
+        ];
+
         let currentDisplayedMonth = new Date().getMonth();
         let currentDisplayedYear = new Date().getFullYear();
-        let userLocation = null;
-        let notificationShown = false;
 
-        // Add this new function to fetch Bapa's schedule
-        async function fetchBapaSchedule() {
-            try {
-                // Show loading state
-                document.getElementById('refresh-icon').className = 'loading-spinner';
-                document.getElementById('refresh-text').textContent = 'Loading';
-                
-                // In a real implementation, you would fetch from BAPS.org API
-                // For this example, we'll use mock data that simulates the structure
-                const proxyUrl = "https://corsproxy.io/?";
-                const targetUrl = "https://www.baps.org/Announcement/2018/HH-Mahant-Swami-Maharajs-Upcoming-Vicharan-Schedule-13400.aspx";
-                const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
-                const text = await response.text();
-                
-                // Parse the HTML to extract schedule (this is simplified)
-                bapaSchedule = parseBapaSchedule(text);
-                
-                // If parsing fails (like when CORS blocks it), use mock data
-                if (bapaSchedule.length === 0) {
-                    bapaSchedule = getMockBapaSchedule();
-                }
-                
-                // Update UI
-                updateScheduleDisplay();
-                
-                // Check for nearby visits
-                checkForNearbyVisits();
-            } catch (error) {
-                console.error('Error fetching Bapa schedule:', error);
-                // Fallback to mock data
-                bapaSchedule = getMockBapaSchedule();
-                updateScheduleDisplay();
-            } finally {
-                // Reset loading state
-                document.getElementById('refresh-icon').className = 'fas fa-sync-alt';
-                document.getElementById('refresh-text').textContent = 'Refresh';
-            }
-        }
-
-        // Function to parse the schedule from BAPS.org HTML
-        function parseBapaSchedule(html) {
-            // This is a simplified parser - in a real app you'd need more robust parsing
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const scheduleItems = [];
-            
-            // Try to find schedule items - this selector would need to match BAPS.org's structure
-            const items = doc.querySelectorAll('.schedule-item'); // This is example - adjust to actual structure
-            
-            if (items.length > 0) {
-                items.forEach(item => {
-                    try {
-                        const dateText = item.querySelector('.date').textContent.trim();
-                        const locationText = item.querySelector('.location').textContent.trim();
-                        const addressText = item.querySelector('.address').textContent.trim();
-                        
-                        scheduleItems.push({
-                            date: new Date(dateText),
-                            location: locationText,
-                            address: addressText,
-                            mandirId: findMandirIdByLocation(locationText)
-                        });
-                    } catch (e) {
-                        console.warn('Failed to parse schedule item', e);
-                    }
-                });
-            }
-            
-            return scheduleItems.length > 0 ? scheduleItems : [];
-        }
-
-        // Helper function to find mandir ID by location name
-        function findMandirIdByLocation(location) {
-            const normalizedLocation = location.toLowerCase();
-            const mandir = mandirs.find(m => 
-                m.name.toLowerCase().includes(normalizedLocation) || 
-                m.location.toLowerCase().includes(normalizedLocation)
-            );
-            return mandir ? mandir.id : null;
-        }
-
-        // Mock data for demonstration
-        function getMockBapaSchedule() {
-            const today = new Date();
-            const nextWeek = new Date(today);
-            nextWeek.setDate(today.getDate() + 7);
-            
-            const twoWeeks = new Date(today);
-            twoWeeks.setDate(today.getDate() + 14);
-            
-            const nextMonth = new Date(today);
-            nextMonth.setMonth(today.getMonth() + 1);
-            
-            return [
-                {
-                    date: today,
-                    location: "BAPS Shri Swaminarayan Mandir, London",
-                    address: "105-119 Brentfield Road, London, UK",
-                    mandirId: "london"
-                },
-                {
-                    date: nextWeek,
-                    location: "BAPS Shri Swaminarayan Mandir, Atlanta",
-                    address: "460 Rockbridge Rd NW, Lilburn, GA, USA",
-                    mandirId: "atlanta"
-                },
-                {
-                    date: twoWeeks,
-                    location: "BAPS Shri Swaminarayan Mandir, Chicago",
-                    address: "1851 Pramukh Swami Rd, Bartlett, IL, USA",
-                    mandirId: "chicago"
-                },
-                {
-                    date: nextMonth,
-                    location: "BAPS Shri Swaminarayan Mandir, Nairobi",
-                    address: "Off Limuru Road, Nairobi, Kenya",
-                    mandirId: "nairobi"
-                }
-            ];
-        }
-
-        // Update the schedule display
         function updateScheduleDisplay() {
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                                "July", "August", "September", "October", "November", "December"];
+            const container = document.getElementById("schedule-container");
+            container.innerHTML = "";
             
             // Update month display
-            document.getElementById('current-month').textContent = 
+            const monthNames = ["January", "February", "March", "April", "May", "June", 
+                              "July", "August", "September", "October", "November", "December"];
+            document.getElementById("current-month").textContent = 
                 `${monthNames[currentDisplayedMonth]} ${currentDisplayedYear}`;
             
-            // Filter schedule for current month
+            const today = new Date();
+            
+            // Filter schedule for current month/year
             const filteredSchedule = bapaSchedule.filter(item => {
                 return item.date.getMonth() === currentDisplayedMonth && 
                        item.date.getFullYear() === currentDisplayedYear;
             });
             
-            const container = document.getElementById('schedule-container');
-            
             if (filteredSchedule.length === 0) {
                 container.innerHTML = `
                     <div class="no-schedule">
-                        <p>No vicharan scheduled for ${monthNames[currentDisplayedMonth]}.</p>
-                        <p>Check back later or try another month.</p>
+                        <p>No scheduled visits for ${monthNames[currentDisplayedMonth]}</p>
                     </div>
                 `;
                 return;
             }
             
-            // Sort schedule by date
-            filteredSchedule.sort((a, b) => a.date - b.date);
+            // Create schedule grid
+            const grid = document.createElement("div");
+            grid.className = "schedule-grid";
+            container.appendChild(grid);
             
-            // Create schedule cards
-            container.innerHTML = '';
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            filteredSchedule.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'schedule-card';
+            filteredSchedule.forEach(entry => {
+                const isCurrent = today >= entry.date && today <= entry.endDate;
+                const isUpcoming = today < entry.date;
                 
-                // Add special class if upcoming or current
-                const itemDate = new Date(item.date);
-                itemDate.setHours(0, 0, 0, 0);
+                const card = document.createElement("div");
+                card.className = "schedule-card" + 
+                                 (isCurrent ? " current" : "") + 
+                                 (isUpcoming ? " upcoming" : "");
                 
-                if (itemDate.getTime() === today.getTime()) {
-                    card.classList.add('current');
-                } else if (itemDate > today && itemDate < new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)) {
-                    card.classList.add('upcoming');
-                }
-                
-                // Format date
-                const dateStr = item.date.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'long', 
-                    day: 'numeric',
-                    year: 'numeric'
+                const formattedStart = entry.date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
                 });
-                
-                // Find associated mandir
-                const mandir = item.mandirId ? mandirs.find(m => m.id === item.mandirId) : null;
-                
-                // Calculate distance if we have user location
-                let distanceInfo = '';
-                if (userLocation && mandir) {
-                    const distance = calculateDistance(
-                        userLocation.lat, 
-                        userLocation.lng,
-                        mandir.lat,
-                        mandir.lng
-                    );
-                    
-                    if (distance < 100) {
-                        distanceInfo = `<div class="schedule-distance">
-                            <i class="fas fa-map-marker-alt"></i>
-                            Only ${Math.round(distance)} km from you!
-                        </div>`;
-                    } else if (distance < 500) {
-                        distanceInfo = `<div class="schedule-distance">
-                            <i class="fas fa-map-marker-alt"></i>
-                            ${Math.round(distance)} km from you
-                        </div>`;
-                    }
-                }
+                const formattedEnd = entry.endDate.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
                 
                 card.innerHTML = `
                     <div class="schedule-date">
-                        <i class="far fa-calendar-alt"></i>
-                        ${dateStr}
+                        <i class="fas fa-calendar-alt"></i>
+                        ${formattedStart} - ${formattedEnd}
                     </div>
-                    <div class="schedule-location">${item.location}</div>
-                    <div class="schedule-address">${item.address}</div>
-                    ${distanceInfo}
+                    <div class="schedule-location">${entry.location}</div>
+                    <div class="schedule-address">${entry.address}</div>
                     <div class="schedule-actions">
-                        <button class="remind-btn" onclick="setReminder('${item.date.toISOString()}')">
-                            <i class="far fa-bell"></i> Remind Me
+                        <button class="navigate-btn" onclick="navigateToMandir('${entry.mandirId}')">
+                            <i class="fas fa-directions"></i> View on Map
                         </button>
-                        ${mandir ? `
-                        <button class="navigate-btn" onclick="navigateToMandir('${mandir.id}')">
-                            <i class="fas fa-directions"></i> Directions
-                        </button>
-                        ` : ''}
                     </div>
+                    ${isCurrent ? '<div class="current-visit-badge">🕊️ Currently Visiting</div>' : ''}
                 `;
                 
-                container.appendChild(card);
+                grid.appendChild(card);
             });
         }
 
@@ -1839,159 +1717,17 @@
             updateScheduleDisplay();
         }
 
-        // Calculate distance between coordinates in km
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius of the earth in km
-            const dLat = deg2rad(lat2 - lat1);
-            const dLon = deg2rad(lon2 - lon1);
-            const a = 
-                Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c; // Distance in km
-        }
-
-        function deg2rad(deg) {
-            return deg * (Math.PI/180);
-        }
-
-        // Set reminder for a visit
-        function setReminder(dateString) {
-            const visitDate = new Date(dateString);
-            const now = new Date();
-            
-            if (visitDate < now) {
-                alert("This visit has already happened.");
-                return;
-            }
-            
-            // In a real app, this would use the Notification API
-            alert(`Reminder set for ${visitDate.toLocaleDateString()}! You'll be notified when Bapa's visit is approaching.`);
-            
-            // Schedule a notification (simplified)
-            const timeDiff = visitDate.getTime() - now.getTime();
-            if (timeDiff < 7 * 24 * 60 * 60 * 1000) { // If within 7 days
-                setTimeout(() => {
-                    showNotification("Bapa's visit is coming up soon!");
-                }, Math.max(0, timeDiff - 24 * 60 * 60 * 1000)); // Notify 1 day before
-            }
-        }
-
         // Navigate to mandir
         function navigateToMandir(mandirId) {
             const mandir = mandirs.find(m => m.id === mandirId);
             if (!mandir) return;
             
-            // In a real app, this would open maps app or show directions
-            alert(`Showing directions to ${mandir.name}...`);
-            
-            // Center map on this mandir if on map view
+            // Center map on this mandir and switch to map view
             if (map) {
                 map.setView([mandir.lat, mandir.lng], 12);
                 showSection('map');
             }
         }
-
-        // Show notification
-        function showNotification(message) {
-            const notification = document.getElementById('bapa-notification');
-            document.getElementById('notification-text').textContent = message;
-            notification.classList.add('show');
-            
-            // Auto-hide after 10 seconds
-            setTimeout(() => {
-                hideNotification();
-            }, 10000);
-        }
-
-        function hideNotification() {
-            document.getElementById('bapa-notification').classList.remove('show');
-        }
-
-        // Check for visits near user's location
-        function checkForNearbyVisits() {
-            if (!userLocation || notificationShown) return;
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            // Check next 14 days
-            const upcomingVisits = bapaSchedule.filter(item => {
-                const itemDate = new Date(item.date);
-                itemDate.setHours(0, 0, 0, 0);
-                
-                return itemDate >= today && 
-                       itemDate <= new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000) &&
-                       item.mandirId;
-            });
-            
-            // Find visits within 200km
-            const nearbyVisits = upcomingVisits.filter(item => {
-                const mandir = mandirs.find(m => m.id === item.mandirId);
-                if (!mandir) return false;
-                
-                const distance = calculateDistance(
-                    userLocation.lat,
-                    userLocation.lng,
-                    mandir.lat,
-                    mandir.lng
-                );
-                
-                return distance < 200;
-            });
-            
-            if (nearbyVisits.length > 0) {
-                // Show notification for the soonest visit
-                const soonestVisit = nearbyVisits.reduce((prev, current) => 
-                    prev.date < current.date ? prev : current
-                );
-                
-                const mandir = mandirs.find(m => m.id === soonestVisit.mandirId);
-                const visitDate = new Date(soonestVisit.date);
-                const dateStr = visitDate.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-                
-                // Show modal notification
-                document.getElementById('bapa-modal-title').textContent = 
-                    `Bapa is Visiting ${mandir ? mandir.name : soonestVisit.location}!`;
-                document.getElementById('bapa-modal-text').textContent = 
-                    `Mahant Swami Maharaj will be visiting ${soonestVisit.location} soon.`;
-                document.getElementById('bapa-modal-date').textContent = 
-                    `Scheduled for ${dateStr}`;
-                
-                document.getElementById('bapa-notification-modal').style.display = 'flex';
-                notificationShown = true;
-            }
-        }
-
-        function closeBapaModal() {
-            document.getElementById('bapa-notification-modal').style.display = 'none';
-        }
-
-        // Get user location
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        
-                        // Check for nearby visits now that we have location
-                        checkForNearbyVisits();
-                    },
-                    error => {
-                        console.log('Geolocation error:', error);
-                    }
-                );
-            }
-        }
-
 
         // Update showSection to handle the new tab
         function showSection(section) {
@@ -2007,21 +1743,12 @@
                     map.invalidateSize();
                 }, 100);
             }
-            
-            // Refresh schedule when showing Bapa Tracker
-            if (section === 'bapa-tracker') {
-                updateScheduleDisplay();
-            }
+        
         }
 
-        window.onload = function() {
+        window.onload = function () {
             loadMandirData();
-            getUserLocation(); // Get user location when page loads
-            
-            // Initialize Bapa Tracker
-            setTimeout(() => {
-                fetchBapaSchedule();
-            }, 1000);
+            updateScheduleDisplay();
         };
     </script>
 </body>
