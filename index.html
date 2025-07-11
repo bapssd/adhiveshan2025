@@ -748,7 +748,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏛️ Darshan Yatra</h1>
+            <h1>🛕 Darshan Yatra</h1>
             <p>Your Personalized BAPS Mandir Journey</p>
         </div>
 
@@ -1108,7 +1108,7 @@
                 const marker = L.marker([mandir.lat, mandir.lng], {
                     icon: L.divIcon({
                         className: `mandir-marker ${isVisited ? 'visited' : ''}`,
-                        html: isVisited ? '🏛️' : '📍',
+                        html: isVisited ? '🛕' : '📍',
                         iconSize: [30, 30]
                     })
                 }).addTo(map);
@@ -1151,7 +1151,7 @@
             if (markerObj) {
                 markerObj.marker.setIcon(L.divIcon({
                     className: `mandir-marker ${isVisited ? 'visited' : ''}`,
-                    html: isVisited ? '🏛️' : '📍',
+                    html: isVisited ? '🛕' : '📍',
                     iconSize: [30, 30]
                 }));
                 
