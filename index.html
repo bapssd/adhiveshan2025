@@ -1410,22 +1410,6 @@
             startGame();
         }
 
-        // Show section
-        function showSection(section) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            
-            document.getElementById(section + '-section').classList.add('active');
-            event.target.classList.add('active');
-            
-            // Refresh map when showing map section
-            if (section === 'map') {
-                setTimeout(() => {
-                    map.invalidateSize();
-                }, 100);
-            }
-        }
-
         let currentChatState = 'initial';
         let currentQueryType = '';
         
@@ -1717,44 +1701,57 @@
             updateScheduleDisplay();
         }
 
-        // Navigate to mandir
-        function navigateToMandir(mandirId) {
-            const mandir = mandirs.find(m => m.id === mandirId);
-            if (!mandir) return;
-            
-            // Center map on this mandir and switch to map view
-            if (map) {
-                map.setView([mandir.lat, mandir.lng], 12);
-                showSection('map');
-            }
-        }
+    function navigateToMandir(mandirKey) {
+    // 1) try numeric lookup
+    let mandir = mandirs.find(m => m.id == mandirKey);
+
+    // 2) fallback: match by city/name substring
+    if (!mandir) {
+        const key = mandirKey.toString().toLowerCase();
+        mandir = mandirs.find(m =>
+        m.name.toLowerCase().includes(key) ||
+        m.location.toLowerCase().includes(key)
+        );
+    }
+
+    if (!mandir) {
+        console.warn(`Could not find a mandir for “${mandirKey}”`);
+        return;
+    }
+
+    // center & zoom
+    map.setView([mandir.lat, mandir.lng], 12);
+    // switch to the map tab
+    showSection('map');
+
+    // optional: open its popup
+    const mk = markers.find(o => o.id === mandir.id);
+    if (mk) mk.marker.openPopup();
+    }
 
         function showSection(section) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        // deactivate all sections & tabs
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
 
-            document.getElementById(section + '-section').classList.add('active');
-
-            // Activate the corresponding tab button
-            const tabButtons = {
-                'map': '🗺️ Interactive Map',
-                'game': '🎮 Murti Quiz',
-                'chatbot': '💬 Mandir Guide',
-                'bapa-tracker': '🕊️ Bapa Tracker'
-            };
-            
-            document.querySelectorAll('.nav-tab').forEach(btn => {
-                if (btn.textContent.trim() === tabButtons[section]) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Refresh map if section is 'map'
-            if (section === 'map') {
-                setTimeout(() => {
-                    map.invalidateSize();
-                }, 100);
+        // activate the one the user clicked (or we’re programmatically showing)
+        document.getElementById(section + '-section').classList.add('active');
+        const labels = {
+            map:       '🗺️ Interactive Map',
+            game:      '🎮 Murti Quiz',
+            chatbot:   '💬 Mandir Guide',
+            'bapa-tracker': '🕊️ Bapa Tracker',
+        };
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+            if (btn.textContent.trim() === labels[section]) {
+            btn.classList.add('active');
             }
+        });
+
+        // Leaflet needs a tiny moment to recalc its size when hidden→visible
+        if (section === 'map') {
+            setTimeout(() => map.invalidateSize(), 100);
+        }
         }
 
         window.onload = function () {
